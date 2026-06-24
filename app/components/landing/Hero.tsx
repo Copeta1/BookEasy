@@ -28,11 +28,13 @@ export default function Hero() {
 
         {/* Desna strana - slika */}
         <div className="relative h-75 md:h-105">
-          <div className="rounded-2xl overflow-hidden h-full border-4 border-white shadow-md">
+          <div className="relative rounded-2xl overflow-hidden h-full border-4 border-white shadow-md">
             <Image
               src="/hero.jpg"
               alt="Business owner"
               fill
+              loading="eager"
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover rounded-2xl"
             />
           </div>
