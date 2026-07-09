@@ -1,0 +1,6 @@
+@BookEasy.API_HostAddress = http://localhost:5291
+
+GET {{BookEasy.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
