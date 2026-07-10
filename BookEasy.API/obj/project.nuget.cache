@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "mlddiMPvIS0=",
+  "dgSpecHash": "v9UjyEd2cvI=",
   "success": true,
-  "projectFilePath": "D:\\Programiranje\\NextJS + DotNet\\BookEasy.API\\BookEasy.API.csproj",
+  "projectFilePath": "D:\\Programiranje\\NextJS + DotNet\\bookeasy\\BookEasy.API\\BookEasy.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pecor\\.nuget\\packages\\bcrypt.net-next\\4.2.0\\bcrypt.net-next.4.2.0.nupkg.sha512",
     "C:\\Users\\pecor\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

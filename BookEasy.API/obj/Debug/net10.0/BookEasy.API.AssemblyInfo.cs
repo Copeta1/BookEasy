@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BookEasy.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+202090e0910f7b974f2d18282f5e2ea9f8798b07")]
 [assembly: System.Reflection.AssemblyProductAttribute("BookEasy.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BookEasy.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

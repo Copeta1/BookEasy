@@ -1,4 +1,6 @@
 using BookEasy.API.Data;
+using BookEasy.API.Helpers;
+using BookEasy.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -34,6 +36,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddScoped<AuthService>();
+
+builder.Services.AddScoped<JwtHelper>();
 
 //CORS - next.js frontend
 builder.Services.AddCors(options =>

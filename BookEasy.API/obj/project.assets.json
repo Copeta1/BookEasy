@@ -3012,11 +3012,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Programiranje\\NextJS + DotNet\\BookEasy.API\\BookEasy.API.csproj",
+      "projectUniqueName": "D:\\Programiranje\\NextJS + DotNet\\bookeasy\\BookEasy.API\\BookEasy.API.csproj",
       "projectName": "BookEasy.API",
-      "projectPath": "D:\\Programiranje\\NextJS + DotNet\\BookEasy.API\\BookEasy.API.csproj",
+      "projectPath": "D:\\Programiranje\\NextJS + DotNet\\bookeasy\\BookEasy.API\\BookEasy.API.csproj",
       "packagesPath": "C:\\Users\\pecor\\.nuget\\packages\\",
-      "outputPath": "D:\\Programiranje\\NextJS + DotNet\\BookEasy.API\\obj\\",
+      "outputPath": "D:\\Programiranje\\NextJS + DotNet\\bookeasy\\BookEasy.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
