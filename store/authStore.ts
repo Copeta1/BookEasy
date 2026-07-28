@@ -20,12 +20,14 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   setUser: (user) => {
     localStorage.setItem("token", user.token);
+    localStorage.setItem("user", JSON.stringify(user));
     document.cookie = `token=${user.token}; path=/`;
     set({ user });
   },
 
   logout: () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     set({ user: null });
   },

@@ -11,6 +11,8 @@ import {
   Cog6ToothIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/outline";
+import { useAuthStore } from "@/store/authStore";
+import { useRouter } from "next/navigation";
 
 const navItems = [
   { label: "Overview", href: "/dashboard", icon: Squares2X2Icon },
@@ -26,6 +28,13 @@ const navItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const logout = useAuthStore((state) => state.logout);
+
+  const handleLogout = () => {
+    logout();
+    router.push("/login");
+  };
 
   return (
     <aside className="w-56 min-h-screen bg-white border-r border-gray-100 flex flex-col">
@@ -67,7 +76,10 @@ export default function Sidebar() {
           <Cog6ToothIcon className="w-5 h-5" />
           Settings
         </Link>
-        <button className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900 w-full">
+        <button
+          onClick={handleLogout}
+          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900 w-full"
+        >
           <ArrowRightOnRectangleIcon className="w-5 h-5" />
           Sign Out
         </button>
