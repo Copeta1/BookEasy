@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import {
   AreaChart,
   Area,
@@ -11,33 +12,53 @@ import {
   BarChart,
   Bar,
 } from "recharts";
+import { apifetch } from "@/lib/api";
 
-const revenueData = [
-  { month: "May", revenue: 1800 },
-  { month: "Jun", revenue: 2200 },
-  { month: "Jul", revenue: 1950 },
-  { month: "Aug", revenue: 2800 },
-  { month: "Sep", revenue: 2400 },
-  { month: "Oct", revenue: 2450 },
-];
+type MonthlyData = {
+  month: string;
+  bookings: number;
+  revenue: number;
+};
 
-const bookingsData = [
-  { month: "May", bookings: 82 },
-  { month: "Jun", bookings: 95 },
-  { month: "Jul", bookings: 88 },
-  { month: "Aug", bookings: 120 },
-  { month: "Sep", bookings: 110 },
-  { month: "Oct", bookings: 124 },
-];
-
-const stats = [
-  { label: "Total Revenue", value: "13,600€", change: "+18% vs last 6mo" },
-  { label: "Total Bookings", value: "619", change: "+22% vs last 6mo" },
-  { label: "Avg. Revenue/mo", value: "2,267€", change: "+8% vs last 6mo" },
-  { label: "Avg. Bookings/mo", value: "103", change: "+12% vs last 6mo" },
-];
+type AnalyticsData = {
+  monthlyData: MonthlyData[];
+  totalBookings: number;
+  totalRevenue: number;
+  totalClients: number;
+  avgBookingsPerMonth: number;
+  avgRevenuePerMonth: number;
+};
 
 export default function AnalyticsPage() {
+  const [data, setData] = useState<AnalyticsData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await apifetch<AnalyticsData>("/api/Analytics");
+        setData(result);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (loading)
+    return <div className="text-gray-400 text-sm p-6">Loading...</div>;
+  if (!data)
+    return <div className="text-gray-400 text-sm p-6">No data available.</div>;
+
+  const stats = [
+    { label: "Total Revenue", value: `${data.totalRevenue}€` },
+    { label: "Total Bookings", value: String(data.totalBookings) },
+    { label: "Total Clients", value: String(data.totalClients) },
+    { label: "Avg. Bookings/mo", value: String(data.avgBookingsPerMonth) },
+  ];
+
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
@@ -57,7 +78,6 @@ export default function AnalyticsPage() {
               {stat.label}
             </p>
             <p className="font-display text-2xl font-bold mb-1">{stat.value}</p>
-            <p className="text-xs text-green-600 font-medium">{stat.change}</p>
           </div>
         ))}
       </div>
@@ -71,7 +91,7 @@ export default function AnalyticsPage() {
             Monthly gross revenue (€)
           </p>
           <ResponsiveContainer width="100%" height={220}>
-            <AreaChart data={revenueData}>
+            <AreaChart data={data.monthlyData}>
               <defs>
                 <linearGradient id="revenueGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.15} />
@@ -114,7 +134,7 @@ export default function AnalyticsPage() {
           <h2 className="font-display text-lg font-semibold mb-1">Bookings</h2>
           <p className="text-xs text-gray-400 mb-6">Monthly total bookings</p>
           <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={bookingsData}>
+            <BarChart data={data.monthlyData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f3f4f6" />
               <XAxis
                 dataKey="month"
