@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PlusIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { apifetch } from "@/lib/api";
 
 type Client = {
   id: number;
@@ -15,64 +16,6 @@ type Client = {
   lastVisit: string;
 };
 
-const initialClients: Client[] = [
-  {
-    id: 1,
-    firstName: "Alex",
-    lastName: "Morgan",
-    email: "alex@example.com",
-    phone: "+385 91 123 4567",
-    type: "Returning Client",
-    totalBookings: 12,
-    totalSpent: 540,
-    lastVisit: "Oct 24, 2024",
-  },
-  {
-    id: 2,
-    firstName: "Jane",
-    lastName: "Doe",
-    email: "jane@example.com",
-    phone: "+385 92 234 5678",
-    type: "VIP Member",
-    totalBookings: 28,
-    totalSpent: 1260,
-    lastVisit: "Oct 24, 2024",
-  },
-  {
-    id: 3,
-    firstName: "Robert",
-    lastName: "King",
-    email: "robert@example.com",
-    phone: "+385 95 345 6789",
-    type: "First Visit",
-    totalBookings: 1,
-    totalSpent: 25,
-    lastVisit: "Oct 24, 2024",
-  },
-  {
-    id: 4,
-    firstName: "Lisa",
-    lastName: "Wong",
-    email: "lisa@example.com",
-    phone: "+385 98 456 7890",
-    type: "Returning Client",
-    totalBookings: 7,
-    totalSpent: 315,
-    lastVisit: "Oct 20, 2024",
-  },
-  {
-    id: 5,
-    firstName: "Mark",
-    lastName: "Taylor",
-    email: "mark@example.com",
-    phone: "+385 91 567 8901",
-    type: "VIP Member",
-    totalBookings: 34,
-    totalSpent: 1530,
-    lastVisit: "Oct 18, 2024",
-  },
-];
-
 const typeBadge: Record<Client["type"], string> = {
   "VIP Member": "bg-purple-100 text-purple-700",
   "Returning Client": "bg-indigo-100 text-indigo-700",
@@ -80,7 +23,8 @@ const typeBadge: Record<Client["type"], string> = {
 };
 
 export default function ClientsPage() {
-  const [clients, setClients] = useState<Client[]>(initialClients);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [form, setForm] = useState({
@@ -91,32 +35,46 @@ export default function ClientsPage() {
     type: "First Visit" as Client["type"],
   });
 
+  const fetchClients = async () => {
+    try {
+      const data = await apifetch<Client[]>("/api/Clients");
+      setClients(data ?? []);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchClients();
+  }, []);
+
   const filtered = clients.filter((c) =>
     `${c.firstName} ${c.lastName} ${c.email}`
       .toLowerCase()
       .includes(search.toLowerCase()),
   );
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!form.firstName || !form.lastName || !form.email) return;
-    setClients([
-      ...clients,
-      {
-        id: Date.now(),
-        ...form,
-        totalBookings: 0,
-        totalSpent: 0,
-        lastVisit: "—",
-      },
-    ]);
-    setIsModalOpen(false);
-    setForm({
-      firstName: "",
-      lastName: "",
-      email: "",
-      phone: "",
-      type: "First Visit",
-    });
+    try {
+      const created = await apifetch<Client>("/api/Clients", {
+        method: "POST",
+        body: JSON.stringify(form),
+      });
+      setClients([...clients, created]);
+      setIsModalOpen(false);
+      setForm({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        type: "First Visit",
+      });
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -147,65 +105,67 @@ export default function ClientsPage() {
 
       {/* Tablica */}
       <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-gray-100">
-              <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
-                Client
-              </th>
-              <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
-                Type
-              </th>
-              <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
-                Bookings
-              </th>
-              <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
-                Total Spent
-              </th>
-              <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
-                Last Visit
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((client) => (
-              <tr
-                key={client.id}
-                className="border-b border-gray-50 last:border-0 hover:bg-gray-50 cursor-pointer"
-              >
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm shrink-0">
-                      {client.firstName[0]}
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">
-                        {client.firstName} {client.lastName}
-                      </p>
-                      <p className="text-xs text-gray-400">{client.email}</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`text-xs font-medium px-2.5 py-1 rounded-full ${typeBadge[client.type]}`}
-                  >
-                    {client.type}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-500">
-                  {client.totalBookings}
-                </td>
-                <td className="px-6 py-4 text-sm font-semibold text-gray-900">
-                  {client.totalSpent}€
-                </td>
-                <td className="px-6 py-4 text-sm text-gray-500">
-                  {client.lastVisit}
-                </td>
+        {loading ? (
+          <p className="text-gray-400 text-sm p-6">Loading...</p>
+        ) : clients.length === 0 ? (
+          <p className="text-gray-400 text-sm p-6">
+            No clients yet. Add your first client!
+          </p>
+        ) : (
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-gray-100">
+                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  Client
+                </th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  Type
+                </th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  Phone
+                </th>
+                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                  Last Visit
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filtered.map((client) => (
+                <tr
+                  key={client.id}
+                  className="border-b border-gray-50 last:border-0 hover:bg-gray-50 cursor-pointer"
+                >
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-sm shrink-0">
+                        {client.firstName[0]}
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">
+                          {client.firstName} {client.lastName}
+                        </p>
+                        <p className="text-xs text-gray-400">{client.email}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`text-xs font-medium px-2.5 py-1 rounded-full ${typeBadge[client.type]}`}
+                    >
+                      {client.type}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-500">
+                    {client.phone || "—"}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-500">
+                    {client.lastVisit || "—"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
       {/* Modal */}
@@ -213,7 +173,6 @@ export default function ClientsPage() {
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-xl">
             <h2 className="font-display text-xl font-bold mb-6">Add Client</h2>
-
             <div className="flex flex-col gap-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -286,7 +245,6 @@ export default function ClientsPage() {
                 </select>
               </div>
             </div>
-
             <div className="flex gap-3 mt-6">
               <button
                 onClick={() => setIsModalOpen(false)}
