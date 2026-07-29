@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "./components/AuthProvider";
 
-const bricolage = Bricolage_Grotesque({
+const geist = Geist({
   subsets: ["latin"],
-  variable: "--font-bricolage",
+  variable: "--font-geist",
 });
 
-const dmSans = DM_Sans({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
-  variable: "--font-dm-sans",
+  variable: "--font-geist-mono",
 });
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${bricolage.variable} ${dmSans.variable} font-sans`}>
+      <body className={`${geist.variable} ${geistMono.variable} font-sans`}>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { useState } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useAuthStore } from "@/store/authStore";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -12,6 +13,7 @@ const navLinks = [
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const user = useAuthStore((state) => state.user);
 
   return (
     <nav className="sticky top-0 bg-white z-10 border-b border-gray-100">
@@ -36,18 +38,29 @@ export default function Navbar() {
 
         {/* Desktop gumbi */}
         <div className="hidden md:flex items-center gap-3">
-          <Link
-            href="/login"
-            className="text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-100"
-          >
-            Login
-          </Link>
-          <Link
-            href="/login"
-            className="text-sm font-medium px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
-          >
-            Get Started
-          </Link>
+          {user ? (
+            <Link
+              href="/dashboard"
+              className="text-sm font-medium px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+            >
+              Go to Dashboard
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-100"
+              >
+                Login
+              </Link>
+              <Link
+                href="/login"
+                className="text-sm font-medium px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+              >
+                Get Started
+              </Link>
+            </>
+          )}
         </div>
         {/* Hamburger gumb */}
         <button
@@ -76,18 +89,29 @@ export default function Navbar() {
             </a>
           ))}
           <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
-            <Link
-              href="/login"
-              className="text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-100"
-            >
-              Login
-            </Link>
-            <Link
-              href="/login"
-              className="text-sm font-medium px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
-            >
-              Get Started
-            </Link>
+            {user ? (
+              <Link
+                href="/dashboard"
+                className="text-sm font-medium px-4 py-2.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-center"
+              >
+                Go to Dashboard
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-100"
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/login"
+                  className="text-sm font-medium px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}
