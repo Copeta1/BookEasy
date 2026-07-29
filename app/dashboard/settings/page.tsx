@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { apifetch } from "@/lib/api";
 
 export default function SettingsPage() {
   const [profile, setProfile] = useState({
@@ -37,6 +38,51 @@ export default function SettingsPage() {
     const minute = i % 2 === 0 ? "00" : "30";
     return `${String(hour).padStart(2, "0")}:${minute}`;
   });
+
+  useEffect(() => {
+    const fetchBusiness = async () => {
+      try {
+        const data = await apifetch<{
+          name: string;
+          email: string;
+          phone: string;
+          address: string;
+          description: string;
+        }>("/api/Business");
+
+        setProfile({
+          businessName: data.name,
+          ownerName: profile.ownerName,
+          email: data.email,
+          phone: data.phone,
+          address: data.address,
+          description: data.description,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchBusiness();
+  }, []);
+
+  const handleSave = async () => {
+    try {
+      await apifetch("/api/Business", {
+        method: "PUT",
+        body: JSON.stringify({
+          name: profile.businessName,
+          email: profile.email,
+          phone: profile.phone,
+          address: profile.address,
+          description: profile.description,
+        }),
+      });
+      alert("Saved successfully!");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -130,7 +176,10 @@ export default function SettingsPage() {
             />
           </div>
           <div className="flex justify-end">
-            <button className="bg-indigo-600 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-700">
+            <button
+              onClick={handleSave}
+              className="bg-indigo-600 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-700"
+            >
               Save Changes
             </button>
           </div>

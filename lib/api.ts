@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:7029";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5291";
 
 export async function apifetch<T>(endpoint: string, options?: RequestInit) : Promise<T> {
     const token = localStorage.getItem("token");
