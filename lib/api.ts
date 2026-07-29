@@ -13,10 +13,12 @@ export async function apifetch<T>(endpoint: string, options?: RequestInit) : Pro
     });
 
     if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.message || "Something went wrong");
-  }
+  const text = await res.text();
+  throw new Error(text || "Something went wrong");
+    }
 
-  return res.json(); 
+    const text = await res.text();
+    if (!text) return null as T;
+    return JSON.parse(text) as T;
 
 }
