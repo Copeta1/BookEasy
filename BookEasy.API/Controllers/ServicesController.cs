@@ -96,5 +96,22 @@ namespace BookEasy.API.Controllers
 
             return Ok(new { message = "Service deleted successfully." });
         }
+
+        [HttpGet("public/{slug}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPublicServices(string slug)
+        {
+            var business = await _context.Businesses
+                .FirstOrDefaultAsync(b => b.Slug == slug);
+
+            if (business == null)
+                return NotFound();
+
+            var services = await _context.Services
+                .Where(s => s.BusinessId == business.Id && s.IsActive)
+                .ToListAsync();
+
+            return Ok(services);
+        }
     }
 }

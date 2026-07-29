@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using BookEasy.API.DTOs.Appointments;
 
 namespace BookEasy.API.Controllers
 {
@@ -130,6 +131,45 @@ namespace BookEasy.API.Controllers
                 .ToListAsync();
 
             return Ok(appointments);
+        }
+
+        [HttpPost("public")]
+        [AllowAnonymous]
+        public async Task<IActionResult> CreatePublicAppointment([FromBody] PublicAppointmentDto dto)
+        {
+            // Pronađi ili kreiraj klijenta
+            var client = await _context.Clients
+                .FirstOrDefaultAsync(c => c.Email == dto.ClientEmail && c.BusinessId == dto.BusinessId);
+
+            if (client == null)
+            {
+                client = new Client
+                {
+                    FirstName = dto.ClientFirstName,
+                    LastName = dto.ClientLastName,
+                    Email = dto.ClientEmail,
+                    Phone = dto.ClientPhone,
+                    Type = "First Visit",
+                    BusinessId = dto.BusinessId
+                };
+                _context.Clients.Add(client);
+                await _context.SaveChangesAsync();
+            }
+
+            var appointment = new Appointment
+            {
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime,
+                Status = AppointmentStatus.Pending,
+                BusinessId = dto.BusinessId,
+                ServiceId = dto.ServiceId,
+                ClientId = client.Id
+            };
+
+            _context.Appointments.Add(appointment);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Appointment booked successfully." });
         }
     }
 }

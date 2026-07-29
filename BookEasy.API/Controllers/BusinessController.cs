@@ -58,5 +58,18 @@ namespace BookEasy.API.Controllers
 
             return Ok(business);
         }
+
+        [HttpGet("public/{slug}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetPublicBusiness(string slug)
+        {
+            var business = await _context.Businesses
+                .FirstOrDefaultAsync(b => b.Slug == slug);
+
+            if (business == null)
+                return NotFound();
+
+            return Ok(business);
+        }
     }
 }

@@ -47,7 +47,12 @@ namespace BookEasy.API.Services
             var business = new Business
             {
                 Name = dto.BusinessName,
-                Slug = dto.BusinessName.ToLower().Replace(" ", "-"),
+                Slug = dto.BusinessName.ToLower()
+                .Replace(" ", "-")
+                .Replace("'", "")
+                .Replace("\"", "")
+                .Replace(".", "")
+                .Replace(",", ""),
                 Email = dto.Email,
                 UserId = user.Id
                 
