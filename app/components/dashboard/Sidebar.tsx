@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Squares2X2Icon,
   CalendarDaysIcon,
@@ -16,34 +17,14 @@ import {
 import { useAuthStore } from "@/store/authStore";
 import { useRouter } from "next/navigation";
 import CommandPalette from "./CommandPalette";
-
-const navGroups = [
-  {
-    label: "Main",
-    items: [
-      { label: "Overview", href: "/dashboard", icon: Squares2X2Icon },
-      { label: "Calendar", href: "/dashboard/calendar", icon: CalendarDaysIcon },
-    ],
-  },
-  {
-    label: "Business",
-    items: [
-      { label: "Clients", href: "/dashboard/clients", icon: UsersIcon },
-      {
-        label: "Services",
-        href: "/dashboard/services",
-        icon: WrenchScrewdriverIcon,
-      },
-      { label: "Analytics", href: "/dashboard/analytics", icon: ChartBarIcon },
-    ],
-  },
-];
+import LanguageSwitcher from "@/app/components/LanguageSwitcher";
 
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
+  const { t } = useTranslation();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -63,6 +44,28 @@ export default function Sidebar() {
     router.push("/login");
   };
 
+  const navGroups = [
+    {
+      label: t("sidebar.groupMain"),
+      items: [
+        { label: t("sidebar.navOverview"), href: "/dashboard", icon: Squares2X2Icon },
+        { label: t("sidebar.navCalendar"), href: "/dashboard/calendar", icon: CalendarDaysIcon },
+      ],
+    },
+    {
+      label: t("sidebar.groupBusiness"),
+      items: [
+        { label: t("sidebar.navClients"), href: "/dashboard/clients", icon: UsersIcon },
+        {
+          label: t("sidebar.navServices"),
+          href: "/dashboard/services",
+          icon: WrenchScrewdriverIcon,
+        },
+        { label: t("sidebar.navAnalytics"), href: "/dashboard/analytics", icon: ChartBarIcon },
+      ],
+    },
+  ];
+
   return (
     <aside className="w-60 min-h-screen bg-white border-r border-stone-100 flex flex-col">
       {/* Logo */}
@@ -70,7 +73,7 @@ export default function Sidebar() {
         <span className="font-display text-xl font-bold text-moss-700">
           BookEasy
         </span>
-        <p className="text-xs text-stone-400 mt-0.5">Salon Management</p>
+        <p className="text-xs text-stone-400 mt-0.5">{t("sidebar.tagline")}</p>
       </div>
 
       <CommandPalette />
@@ -109,7 +112,7 @@ export default function Sidebar() {
       <div className="mx-3 mb-3 p-3.5 bg-moss-50 rounded-xl">
         <div className="flex items-baseline justify-between mb-2">
           <span className="text-xs font-semibold text-moss-700">
-            Starter plan
+            {t("sidebar.planName")}
           </span>
           <span className="text-xs font-semibold text-moss-600">32/50</span>
         </div>
@@ -117,8 +120,13 @@ export default function Sidebar() {
           <div className="h-full bg-moss-600 rounded-full" style={{ width: "64%" }} />
         </div>
         <a href="#" className="text-xs font-semibold text-moss-700 hover:underline">
-          Upgrade for unlimited bookings →
+          {t("sidebar.upgrade")}
         </a>
+      </div>
+
+      {/* Jezik */}
+      <div className="px-3 pb-2">
+        <LanguageSwitcher className="w-full justify-center" />
       </div>
 
       {/* Account meni */}
@@ -131,7 +139,7 @@ export default function Sidebar() {
               className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm text-stone-700 hover:bg-stone-100"
             >
               <Cog6ToothIcon className="w-4 h-4 text-stone-400" />
-              Account settings
+              {t("sidebar.accountSettings")}
             </Link>
             <div className="h-px bg-stone-100 my-1.5 mx-1" />
             <button
@@ -139,7 +147,7 @@ export default function Sidebar() {
               className="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-sm text-red-600 hover:bg-red-50"
             >
               <ArrowRightOnRectangleIcon className="w-4 h-4" />
-              Sign out
+              {t("sidebar.signOut")}
             </button>
           </div>
         )}
@@ -153,7 +161,7 @@ export default function Sidebar() {
           </div>
           <div className="min-w-0 text-left">
             <p className="text-sm font-semibold truncate">{user?.businessName}</p>
-            <p className="text-xs text-stone-400">Owner</p>
+            <p className="text-xs text-stone-400">{t("sidebar.owner")}</p>
           </div>
           <ChevronDownIcon
             className={`w-4 h-4 text-stone-400 ml-auto shrink-0 transition-transform ${menuOpen ? "rotate-180" : ""}`}

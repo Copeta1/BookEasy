@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import {
   MagnifyingGlassIcon,
   PlusIcon,
@@ -19,25 +20,26 @@ type Item = {
   icon: React.ComponentType<{ className?: string }>;
 };
 
-const actions: Item[] = [
-  { label: "New appointment", href: "/dashboard/calendar", icon: PlusIcon },
-  { label: "Add client", href: "/dashboard/clients", icon: PlusIcon },
-  { label: "Add service", href: "/dashboard/services", icon: PlusIcon },
-];
-
-const pages: Item[] = [
-  { label: "Overview", href: "/dashboard", icon: Squares2X2Icon },
-  { label: "Calendar", href: "/dashboard/calendar", icon: CalendarDaysIcon },
-  { label: "Clients", href: "/dashboard/clients", icon: UsersIcon },
-  { label: "Services", href: "/dashboard/services", icon: WrenchScrewdriverIcon },
-  { label: "Analytics", href: "/dashboard/analytics", icon: ChartBarIcon },
-  { label: "Settings", href: "/dashboard/settings", icon: Cog6ToothIcon },
-];
-
 export default function CommandPalette() {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const router = useRouter();
+
+  const actions: Item[] = [
+    { label: t("commandPalette.newAppointment"), href: "/dashboard/calendar", icon: PlusIcon },
+    { label: t("commandPalette.addClient"), href: "/dashboard/clients", icon: PlusIcon },
+    { label: t("commandPalette.addService"), href: "/dashboard/services", icon: PlusIcon },
+  ];
+
+  const pages: Item[] = [
+    { label: t("commandPalette.overview"), href: "/dashboard", icon: Squares2X2Icon },
+    { label: t("commandPalette.calendar"), href: "/dashboard/calendar", icon: CalendarDaysIcon },
+    { label: t("commandPalette.clients"), href: "/dashboard/clients", icon: UsersIcon },
+    { label: t("commandPalette.services"), href: "/dashboard/services", icon: WrenchScrewdriverIcon },
+    { label: t("commandPalette.analytics"), href: "/dashboard/analytics", icon: ChartBarIcon },
+    { label: t("commandPalette.settings"), href: "/dashboard/settings", icon: Cog6ToothIcon },
+  ];
 
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
@@ -76,7 +78,7 @@ export default function CommandPalette() {
         className="flex items-center gap-2 mx-3 mb-3 px-3 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-stone-500 text-sm hover:bg-stone-100 w-[calc(100%-1.5rem)]"
       >
         <MagnifyingGlassIcon className="w-4 h-4 shrink-0" />
-        <span className="flex-1 text-left">Search or jump to...</span>
+        <span className="flex-1 text-left">{t("commandPalette.trigger")}</span>
         <span className="text-xs border border-stone-200 bg-white rounded px-1.5 py-0.5 text-stone-400 font-mono">
           ⌘K
         </span>
@@ -96,7 +98,7 @@ export default function CommandPalette() {
                 autoFocus
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Type a command or search..."
+                placeholder={t("commandPalette.placeholder") ?? ""}
                 className="flex-1 outline-none text-sm"
               />
               <span className="text-xs border border-stone-200 rounded px-1.5 py-0.5 text-stone-400 font-mono">
@@ -108,7 +110,7 @@ export default function CommandPalette() {
               {filteredActions.length > 0 && (
                 <>
                   <p className="text-[11px] font-semibold uppercase tracking-wide text-stone-400 px-2 pt-2 pb-1">
-                    Actions
+                    {t("commandPalette.actions")}
                   </p>
                   {filteredActions.map((item) => (
                     <button
@@ -126,7 +128,7 @@ export default function CommandPalette() {
               {filteredPages.length > 0 && (
                 <>
                   <p className="text-[11px] font-semibold uppercase tracking-wide text-stone-400 px-2 pt-2 pb-1">
-                    Go to
+                    {t("commandPalette.goTo")}
                   </p>
                   {filteredPages.map((item) => (
                     <button
@@ -143,7 +145,7 @@ export default function CommandPalette() {
 
               {filteredActions.length === 0 && filteredPages.length === 0 && (
                 <p className="text-sm text-stone-400 px-2 py-4 text-center">
-                  No results for &quot;{query}&quot;
+                  {t("commandPalette.noResults", { query })}
                 </p>
               )}
             </div>

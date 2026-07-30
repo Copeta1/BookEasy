@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "./components/AuthProvider";
+import I18nProvider from "./components/I18nProvider";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "BookEasy",
-  description: "Booking made simple for your business",
+  description: "Rezervacije jednostavno za vaš biznis",
 };
 
 export default function RootLayout({
@@ -24,9 +25,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="hr">
       <body className={`${geist.variable} ${geistMono.variable} font-sans`}>
-        <AuthProvider>{children}</AuthProvider>
+        <I18nProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </I18nProvider>
       </body>
     </html>
   );

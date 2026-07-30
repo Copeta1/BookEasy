@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   CalendarDaysIcon,
   BanknotesIcon,
@@ -22,7 +23,6 @@ type Appointment = {
 type Client = { id: number };
 type Service = { id: number };
 
-const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const DISMISS_KEY = "setupBannerDismissed";
 
 function startOfWeek(date: Date) {
@@ -35,6 +35,10 @@ function startOfWeek(date: Date) {
 }
 
 export default function DashboardPage() {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === "hr" ? "hr-HR" : "en-US";
+  const weekdays = t("overview.weekdays", { returnObjects: true }) as string[];
+
   const [todayAppointments, setTodayAppointments] = useState<Appointment[]>([]);
   const [allAppointments, setAllAppointments] = useState<Appointment[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
@@ -73,7 +77,7 @@ export default function DashboardPage() {
   const today = new Date();
 
   const getHour = (dateStr: string) =>
-    new Date(dateStr).toLocaleTimeString("en-US", {
+    new Date(dateStr).toLocaleTimeString(locale, {
       hour: "2-digit",
       minute: "2-digit",
     });
@@ -97,7 +101,7 @@ export default function DashboardPage() {
   );
 
   const weekStart = startOfWeek(today);
-  const weekCounts = WEEKDAYS.map((_, i) => {
+  const weekCounts = weekdays.map((_, i) => {
     const dayStart = new Date(weekStart);
     dayStart.setDate(weekStart.getDate() + i);
     const dayEnd = new Date(dayStart);
@@ -114,9 +118,9 @@ export default function DashboardPage() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-bold">Overview</h1>
+        <h1 className="font-display text-2xl font-bold">{t("overview.title")}</h1>
         <p className="text-stone-500 text-sm mt-1">
-          {today.toLocaleDateString("en-US", {
+          {today.toLocaleDateString(locale, {
             weekday: "long",
             month: "long",
             day: "numeric",
@@ -129,14 +133,16 @@ export default function DashboardPage() {
       {!loading && !setupDone && !bannerDismissed && (
         <div className="flex flex-wrap items-center gap-4 bg-moss-50 border border-moss-100 rounded-2xl px-5 py-4 mb-6">
           <div className="flex-1 min-w-[180px]">
-            <p className="text-sm font-bold">Finish setting up your business</p>
-            <p className="text-xs text-stone-500">{stepsComplete} of 3 steps complete</p>
+            <p className="text-sm font-bold">{t("overview.setupTitle")}</p>
+            <p className="text-xs text-stone-500">
+              {t("overview.setupProgress", { count: stepsComplete })}
+            </p>
           </div>
           <div className="flex items-center gap-2">
             {[
-              { label: "Profile", done: profileDone },
-              { label: "Services", done: servicesDone },
-              { label: "First booking", done: firstBookingDone },
+              { label: t("overview.stepProfile"), done: profileDone },
+              { label: t("overview.stepServices"), done: servicesDone },
+              { label: t("overview.stepFirstBooking"), done: firstBookingDone },
             ].map((step, i, arr) => (
               <div key={step.label} className="flex items-center gap-2">
                 <span
@@ -161,7 +167,7 @@ export default function DashboardPage() {
             href={!servicesDone ? "/dashboard/services" : "/dashboard/calendar"}
             className="bg-moss-600 text-white text-xs font-bold px-4 py-2.5 rounded-full whitespace-nowrap hover:bg-moss-700"
           >
-            {!servicesDone ? "Add your first service →" : "Add your first booking →"}
+            {!servicesDone ? t("overview.ctaAddService") : t("overview.ctaAddBooking")}
           </a>
           <button
             onClick={dismissBanner}
@@ -177,11 +183,11 @@ export default function DashboardPage() {
       <div className="grid grid-cols-4 grid-rows-[repeat(2,11rem)] gap-4">
         {/* Today's schedule */}
         <div className="col-span-2 row-span-2 bg-white border border-stone-100 rounded-3xl p-5 flex flex-col overflow-hidden">
-          <h2 className="text-sm font-bold mb-3">Today&apos;s schedule</h2>
+          <h2 className="text-sm font-bold mb-3">{t("overview.scheduleTitle")}</h2>
           {loading ? (
-            <p className="text-stone-400 text-sm">Loading...</p>
+            <p className="text-stone-400 text-sm">{t("overview.loading")}</p>
           ) : todayAppointments.length === 0 ? (
-            <p className="text-stone-400 text-sm">No appointments today.</p>
+            <p className="text-stone-400 text-sm">{t("overview.noAppointmentsToday")}</p>
           ) : (
             <div className="flex-1 overflow-y-auto flex flex-col">
               {todayAppointments.map((apt, i) => (
@@ -189,7 +195,7 @@ export default function DashboardPage() {
                   {i === nowIndex && (
                     <div className="flex items-center gap-2 my-1">
                       <span className="text-[10px] font-bold text-white bg-moss-600 px-2 py-0.5 rounded-full tracking-wide">
-                        NOW
+                        {t("overview.now")}
                       </span>
                       <span className="flex-1 h-px bg-moss-600" />
                     </div>
@@ -223,7 +229,7 @@ export default function DashboardPage() {
               {nowIndex === -1 && todayAppointments.length > 0 && (
                 <div className="flex items-center gap-2 my-1">
                   <span className="text-[10px] font-bold text-white bg-moss-600 px-2 py-0.5 rounded-full tracking-wide">
-                    NOW
+                    {t("overview.now")}
                   </span>
                   <span className="flex-1 h-px bg-moss-600" />
                 </div>
@@ -235,7 +241,7 @@ export default function DashboardPage() {
         {/* Next up */}
         <div className="bg-stone-900 text-white rounded-3xl p-5">
           <p className="text-[11px] font-bold uppercase tracking-wide text-moss-300 mb-2.5">
-            Next up
+            {t("overview.nextUp")}
           </p>
           {nextAppointment ? (
             <>
@@ -261,14 +267,14 @@ export default function DashboardPage() {
                     ),
                   )}
                 </span>
-                <span className="text-xs text-stone-300">min away</span>
+                <span className="text-xs text-stone-300">{t("overview.minAway")}</span>
               </div>
             </>
           ) : (
             <p className="text-sm text-stone-300">
               {todayAppointments.length === 0
-                ? "No appointments today."
-                : "You're done for today."}
+                ? t("overview.noAppointmentsToday")
+                : t("overview.allDoneToday")}
             </p>
           )}
         </div>
@@ -277,11 +283,11 @@ export default function DashboardPage() {
         <div className="bg-white border border-stone-100 rounded-3xl p-5">
           <p className="text-xs font-semibold uppercase tracking-wide text-stone-400 flex items-center gap-1.5 mb-2">
             <CalendarDaysIcon className="w-4 h-4 text-moss-600" />
-            Today
+            {t("overview.todayStat")}
           </p>
           <p className="text-2xl font-extrabold tabular-nums">
             {todayAppointments.length}{" "}
-            <span className="text-xs font-semibold text-stone-400">appts</span>
+            <span className="text-xs font-semibold text-stone-400">{t("overview.appts")}</span>
           </p>
           {todayAppointments.length > 0 && (
             <div className="flex mt-2.5">
@@ -302,7 +308,7 @@ export default function DashboardPage() {
         <div className="bg-white border border-stone-100 rounded-3xl p-5">
           <p className="text-xs font-semibold uppercase tracking-wide text-stone-400 flex items-center gap-1.5 mb-2">
             <BanknotesIcon className="w-4 h-4 text-moss-600" />
-            Revenue
+            {t("overview.revenueStat")}
           </p>
           <p className="text-2xl font-extrabold tabular-nums">—</p>
         </div>
@@ -311,7 +317,7 @@ export default function DashboardPage() {
         <div className="bg-white border border-stone-100 rounded-3xl p-5">
           <p className="text-xs font-semibold uppercase tracking-wide text-stone-400 flex items-center gap-1.5 mb-2">
             <UserGroupIcon className="w-4 h-4 text-moss-600" />
-            Clients
+            {t("overview.clientsStat")}
           </p>
           <p className="text-2xl font-extrabold tabular-nums">{clients.length}</p>
         </div>
@@ -319,9 +325,9 @@ export default function DashboardPage() {
 
       {/* Weekly chart */}
       <div className="bg-white border border-stone-100 rounded-3xl p-5 mt-4">
-        <h2 className="text-sm font-bold mb-4">This week</h2>
+        <h2 className="text-sm font-bold mb-4">{t("overview.thisWeek")}</h2>
         <div className="flex items-end gap-4 h-24">
-          {WEEKDAYS.map((day, i) => (
+          {weekdays.map((day, i) => (
             <div key={day} className="flex-1 h-full flex flex-col items-center justify-end gap-1.5">
               <span
                 className={`text-xs font-bold tabular-nums ${i === todayIndex ? "text-moss-700" : "text-stone-400"}`}

@@ -2,18 +2,21 @@
 import Link from "next/link";
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useAuthStore } from "@/store/authStore";
-
-const navLinks = [
-  { label: "Features", href: "#features" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "About", href: "#about" },
-];
+import LanguageSwitcher from "@/app/components/LanguageSwitcher";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const user = useAuthStore((state) => state.user);
+  const { t } = useTranslation();
+
+  const navLinks = [
+    { label: t("nav.features"), href: "#features" },
+    { label: t("nav.pricing"), href: "#pricing" },
+    { label: t("nav.about"), href: "#about" },
+  ];
 
   return (
     <nav className="sticky top-0 bg-white z-10 border-b border-stone-100">
@@ -38,12 +41,13 @@ export default function Navbar() {
 
         {/* Desktop gumbi */}
         <div className="hidden md:flex items-center gap-3">
+          <LanguageSwitcher />
           {user ? (
             <Link
               href="/dashboard"
               className="text-sm font-medium px-5 py-2 rounded-full bg-moss-600 text-white hover:bg-moss-700"
             >
-              Go to Dashboard
+              {t("nav.goToDashboard")}
             </Link>
           ) : (
             <>
@@ -51,13 +55,13 @@ export default function Navbar() {
                 href="/login"
                 className="text-sm font-medium px-4 py-2 rounded-full hover:bg-stone-100"
               >
-                Login
+                {t("nav.login")}
               </Link>
               <Link
                 href="/login"
                 className="text-sm font-medium px-5 py-2 rounded-full bg-moss-600 text-white hover:bg-moss-700"
               >
-                Get Started
+                {t("nav.getStarted")}
               </Link>
             </>
           )}
@@ -88,13 +92,16 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          <div className="flex flex-col gap-2 pt-2 border-t border-stone-100">
+          <div className="pt-2 border-t border-stone-100">
+            <LanguageSwitcher />
+          </div>
+          <div className="flex flex-col gap-2">
             {user ? (
               <Link
                 href="/dashboard"
                 className="text-sm font-medium px-4 py-2.5 rounded-full bg-moss-600 text-white hover:bg-moss-700 text-center"
               >
-                Go to Dashboard
+                {t("nav.goToDashboard")}
               </Link>
             ) : (
               <>
@@ -102,13 +109,13 @@ export default function Navbar() {
                   href="/login"
                   className="text-sm font-medium px-4 py-2 rounded-full hover:bg-stone-100"
                 >
-                  Login
+                  {t("nav.login")}
                 </Link>
                 <Link
                   href="/login"
                   className="text-sm font-medium px-5 py-2 rounded-full bg-moss-600 text-white hover:bg-moss-700"
                 >
-                  Get Started
+                  {t("nav.getStarted")}
                 </Link>
               </>
             )}

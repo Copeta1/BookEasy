@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { PlusIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { apifetch } from "@/lib/api";
 
@@ -14,6 +15,7 @@ type Service = {
 };
 
 export default function ServicesPage() {
+  const { t } = useTranslation();
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -108,42 +110,40 @@ export default function ServicesPage() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-display text-2xl font-bold">Services</h1>
+        <h1 className="font-display text-2xl font-bold">{t("services.title")}</h1>
         <button
           onClick={openAdd}
           className="flex items-center gap-2 bg-moss-600 text-white px-4 py-2.5 rounded-full text-sm font-medium hover:bg-moss-700"
         >
           <PlusIcon className="w-4 h-4" />
-          Add Service
+          {t("services.addService")}
         </button>
       </div>
 
       {/* Tablica */}
       <div className="bg-white border border-stone-100 rounded-3xl overflow-hidden">
         {loading ? (
-          <p className="text-stone-400 text-sm p-6">Loading...</p>
+          <p className="text-stone-400 text-sm p-6">{t("overview.loading")}</p>
         ) : services.length === 0 ? (
-          <p className="text-stone-400 text-sm p-6">
-            No services yet. Add your first service!
-          </p>
+          <p className="text-stone-400 text-sm p-6">{t("services.noServicesYet")}</p>
         ) : (
           <table className="w-full">
             <thead>
               <tr className="border-b border-stone-100">
                 <th className="text-left px-6 py-4 text-xs font-semibold text-stone-400 uppercase tracking-wide">
-                  Service
+                  {t("services.colService")}
                 </th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-stone-400 uppercase tracking-wide">
-                  Category
+                  {t("services.colCategory")}
                 </th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-stone-400 uppercase tracking-wide">
-                  Duration
+                  {t("services.colDuration")}
                 </th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-stone-400 uppercase tracking-wide">
-                  Price
+                  {t("services.colPrice")}
                 </th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-stone-400 uppercase tracking-wide">
-                  Actions
+                  {t("services.colActions")}
                 </th>
               </tr>
             </thead>
@@ -164,10 +164,10 @@ export default function ServicesPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 text-sm text-stone-500">
-                    {service.duration} min
+                    {service.duration} {t("services.minutesShort")}
                   </td>
                   <td className="px-6 py-4 text-sm font-semibold text-stone-900">
-                    {service.price === 0 ? "Free" : `${service.price}€`}
+                    {service.price === 0 ? t("services.free") : `${service.price}€`}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
@@ -197,24 +197,24 @@ export default function ServicesPage() {
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
           <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-xl">
             <h2 className="font-display text-xl font-bold mb-6">
-              {editingService ? "Edit Service" : "Add Service"}
+              {editingService ? t("services.modalEdit") : t("services.modalAdd")}
             </h2>
             <div className="flex flex-col gap-4">
               <div>
                 <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                  Service Name
+                  {t("services.nameLabel")}
                 </label>
                 <input
                   type="text"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  placeholder="e.g. Balayage & Styling"
+                  placeholder={t("services.namePlaceholder") ?? ""}
                   className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                 />
               </div>
               <div>
                 <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                  Category
+                  {t("services.categoryLabel")}
                 </label>
                 <input
                   type="text"
@@ -222,14 +222,14 @@ export default function ServicesPage() {
                   onChange={(e) =>
                     setForm({ ...form, category: e.target.value })
                   }
-                  placeholder="e.g. Hair, Nails, Grooming"
+                  placeholder={t("services.categoryPlaceholder") ?? ""}
                   className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                    Duration (min)
+                    {t("services.durationLabel")}
                   </label>
                   <input
                     type="number"
@@ -237,13 +237,13 @@ export default function ServicesPage() {
                     onChange={(e) =>
                       setForm({ ...form, duration: e.target.value })
                     }
-                    placeholder="45"
+                    placeholder={t("services.durationPlaceholder") ?? ""}
                     className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                   />
                 </div>
                 <div>
                   <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                    Price (€)
+                    {t("services.priceLabel")}
                   </label>
                   <input
                     type="number"
@@ -262,13 +262,13 @@ export default function ServicesPage() {
                 onClick={() => setIsModalOpen(false)}
                 className="flex-1 border border-stone-200 text-stone-600 py-3 rounded-full text-sm font-medium hover:bg-stone-50"
               >
-                Cancel
+                {t("services.cancel")}
               </button>
               <button
                 onClick={handleSave}
                 className="flex-1 bg-moss-600 text-white py-3 rounded-full text-sm font-medium hover:bg-moss-700"
               >
-                {editingService ? "Save Changes" : "Add Service"}
+                {editingService ? t("services.saveChanges") : t("services.addService")}
               </button>
             </div>
           </div>

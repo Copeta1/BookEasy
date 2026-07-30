@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { PlusIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { apifetch } from "@/lib/api";
 
@@ -23,6 +24,14 @@ const typeBadge: Record<Client["type"], string> = {
 };
 
 export default function ClientsPage() {
+  const { t } = useTranslation();
+
+  const typeLabel: Record<Client["type"], string> = {
+    "VIP Member": t("clients.typeVip"),
+    "Returning Client": t("clients.typeReturning"),
+    "First Visit": t("clients.typeFirst"),
+  };
+
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -81,13 +90,13 @@ export default function ClientsPage() {
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-display text-2xl font-bold">Clients</h1>
+        <h1 className="font-display text-2xl font-bold">{t("clients.title")}</h1>
         <button
           onClick={() => setIsModalOpen(true)}
           className="flex items-center gap-2 bg-moss-600 text-white px-4 py-2.5 rounded-full text-sm font-medium hover:bg-moss-700"
         >
           <PlusIcon className="w-4 h-4" />
-          Add Client
+          {t("clients.addClient")}
         </button>
       </div>
 
@@ -96,7 +105,7 @@ export default function ClientsPage() {
         <MagnifyingGlassIcon className="w-4 h-4 text-stone-400 absolute left-4 top-1/2 -translate-y-1/2" />
         <input
           type="text"
-          placeholder="Search clients..."
+          placeholder={t("clients.searchPlaceholder") ?? ""}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full border border-stone-200 rounded-full pl-10 pr-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
@@ -105,12 +114,10 @@ export default function ClientsPage() {
 
       {/* Lista klijenata */}
       {loading ? (
-        <p className="text-stone-400 text-sm p-6">Loading...</p>
+        <p className="text-stone-400 text-sm p-6">{t("overview.loading")}</p>
       ) : clients.length === 0 ? (
         <div className="bg-white border border-stone-100 rounded-3xl p-6">
-          <p className="text-stone-400 text-sm">
-            No clients yet. Add your first client!
-          </p>
+          <p className="text-stone-400 text-sm">{t("clients.noClientsYet")}</p>
         </div>
       ) : (
         <div className="flex flex-col gap-2.5">
@@ -122,30 +129,34 @@ export default function ClientsPage() {
               <div className="w-11 h-11 rounded-full bg-moss-100 flex items-center justify-center text-moss-700 font-bold shrink-0">
                 {client.firstName[0]}
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold truncate">
                   {client.firstName} {client.lastName}
                 </p>
                 <p className="text-xs text-stone-400 truncate">{client.email}</p>
               </div>
               <span
-                className={`text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap ${typeBadge[client.type]}`}
+                className={`text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap shrink-0 ${typeBadge[client.type]}`}
               >
-                {client.type}
+                {typeLabel[client.type]}
               </span>
               <div className="ml-auto flex items-center gap-6 text-right shrink-0">
                 <div className="hidden sm:block">
-                  <p className="text-sm font-bold tabular-nums">{client.totalBookings}</p>
-                  <p className="text-[11px] uppercase tracking-wide text-stone-400">Bookings</p>
+                  <p className="text-sm font-bold tabular-nums">{client.totalBookings ?? 0}</p>
+                  <p className="text-[11px] uppercase tracking-wide text-stone-400">
+                    {t("clients.bookings")}
+                  </p>
                 </div>
                 <div className="hidden sm:block">
-                  <p className="text-sm font-bold tabular-nums">{client.totalSpent}€</p>
-                  <p className="text-[11px] uppercase tracking-wide text-stone-400">Spent</p>
+                  <p className="text-sm font-bold tabular-nums">{client.totalSpent ?? 0}€</p>
+                  <p className="text-[11px] uppercase tracking-wide text-stone-400">
+                    {t("clients.spent")}
+                  </p>
                 </div>
                 <div>
                   <p className="text-sm text-stone-600">{client.phone || "—"}</p>
                   <p className="text-[11px] uppercase tracking-wide text-stone-400">
-                    {client.lastVisit || "No visits yet"}
+                    {client.lastVisit || t("clients.noVisitsYet")}
                   </p>
                 </div>
               </div>
@@ -158,12 +169,14 @@ export default function ClientsPage() {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
           <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-xl">
-            <h2 className="font-display text-xl font-bold mb-6">Add Client</h2>
+            <h2 className="font-display text-xl font-bold mb-6">
+              {t("clients.modalTitle")}
+            </h2>
             <div className="flex flex-col gap-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                    First Name
+                    {t("clients.firstName")}
                   </label>
                   <input
                     type="text"
@@ -171,13 +184,13 @@ export default function ClientsPage() {
                     onChange={(e) =>
                       setForm({ ...form, firstName: e.target.value })
                     }
-                    placeholder="John"
+                    placeholder={t("clients.firstNamePlaceholder") ?? ""}
                     className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                   />
                 </div>
                 <div>
                   <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                    Last Name
+                    {t("clients.lastName")}
                   </label>
                   <input
                     type="text"
@@ -185,14 +198,14 @@ export default function ClientsPage() {
                     onChange={(e) =>
                       setForm({ ...form, lastName: e.target.value })
                     }
-                    placeholder="Doe"
+                    placeholder={t("clients.lastNamePlaceholder") ?? ""}
                     className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                   />
                 </div>
               </div>
               <div>
                 <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                  Email
+                  {t("clients.email")}
                 </label>
                 <input
                   type="email"
@@ -204,7 +217,7 @@ export default function ClientsPage() {
               </div>
               <div>
                 <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                  Phone
+                  {t("clients.phone")}
                 </label>
                 <input
                   type="tel"
@@ -216,7 +229,7 @@ export default function ClientsPage() {
               </div>
               <div>
                 <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                  Type
+                  {t("clients.type")}
                 </label>
                 <select
                   value={form.type}
@@ -225,9 +238,9 @@ export default function ClientsPage() {
                   }
                   className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                 >
-                  <option>First Visit</option>
-                  <option>Returning Client</option>
-                  <option>VIP Member</option>
+                  <option value="First Visit">{t("clients.typeFirst")}</option>
+                  <option value="Returning Client">{t("clients.typeReturning")}</option>
+                  <option value="VIP Member">{t("clients.typeVip")}</option>
                 </select>
               </div>
             </div>
@@ -236,13 +249,13 @@ export default function ClientsPage() {
                 onClick={() => setIsModalOpen(false)}
                 className="flex-1 border border-stone-200 text-stone-600 py-3 rounded-full text-sm font-medium hover:bg-stone-50"
               >
-                Cancel
+                {t("clients.cancel")}
               </button>
               <button
                 onClick={handleSave}
                 className="flex-1 bg-moss-600 text-white py-3 rounded-full text-sm font-medium hover:bg-moss-700"
               >
-                Add Client
+                {t("clients.addClient")}
               </button>
             </div>
           </div>

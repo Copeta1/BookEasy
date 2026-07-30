@@ -1,27 +1,33 @@
+"use client";
+
+import { useTranslation } from "react-i18next";
+
 export default function Hero() {
+  const { t } = useTranslation();
+  const days = t("hero.days", { returnObjects: true }) as string[];
+
   return (
     <section className="bg-stone-50 py-20 w-full">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center px-6 md:px-16 max-w-7xl mx-auto">
         {/* Lijeva strana - tekst */}
         <div className="text-center md:text-left">
           <h1 className="font-display text-4xl md:text-5xl font-bold leading-tight mb-5">
-            Booking made simple{" "}
+            {t("hero.titleLine1")}{" "}
             <span className="font-serif italic font-normal text-moss-700">
-              for your business
+              {t("hero.titleAccent")}
             </span>
           </h1>
 
           <p className="text-stone-500 text-base md:text-lg leading-relaxed mb-8 max-w-md mx-auto md:mx-0">
-            The all-in-one platform for small businesses to automate scheduling,
-            manage client relationships, and get paid faster.
+            {t("hero.subtitle")}
           </p>
 
           <div className="flex items-center justify-center md:justify-start gap-3 flex-wrap">
             <button className="bg-moss-600 text-white px-7 py-3.5 rounded-full text-sm font-medium hover:bg-moss-700">
-              Get Started for Free
+              {t("hero.ctaPrimary")}
             </button>
             <button className="flex items-center gap-2 px-6 py-3.5 rounded-full text-sm font-medium border border-stone-200 bg-white hover:bg-stone-100">
-              Watch Demo
+              {t("hero.ctaSecondary")}
             </button>
           </div>
         </div>
@@ -34,10 +40,10 @@ export default function Hero() {
           {/* Kalendar kartica */}
           <div className="absolute top-[10%] left-[6%] w-[64%] bg-white rounded-3xl p-5 shadow-lg shadow-stone-900/10">
             <p className="text-xs font-semibold uppercase tracking-wide text-stone-400 mb-3">
-              July 2026
+              {t("hero.calendarMonth")}
             </p>
             <div className="grid grid-cols-7 gap-1">
-              {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
+              {days.map((d, i) => (
                 <span
                   key={`d-${i}`}
                   className="aspect-square flex items-center justify-center text-[11px] text-stone-400"
@@ -66,8 +72,8 @@ export default function Hero() {
               M
             </div>
             <div>
-              <p className="text-xs font-semibold">New Appointment</p>
-              <p className="text-xs text-stone-300">Today at 2:00 PM</p>
+              <p className="text-xs font-semibold">{t("hero.notifTitle")}</p>
+              <p className="text-xs text-stone-300">{t("hero.notifSubtitle")}</p>
             </div>
           </div>
         </div>

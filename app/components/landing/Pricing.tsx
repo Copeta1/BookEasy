@@ -1,49 +1,52 @@
+"use client";
+
+import { useTranslation } from "react-i18next";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 
-const plans = [
-  {
-    name: "Starter",
-    price: "15",
-    description:
-      "Perfect for freelancers and solo practitioners just starting out.",
-    features: [
-      { text: "Up to 50 bookings/mo", included: true },
-      { text: "Basic scheduling", included: true },
-      { text: "Client management", included: true },
-      { text: "Analytics", included: false },
-      { text: "Team collaboration", included: false },
-    ],
-    featured: false,
-    buttonText: "Choose Starter",
-  },
-  {
-    name: "Professional",
-    price: "35",
-    description: "For businesses that need advanced tools to scale and grow.",
-    features: [
-      { text: "Unlimited bookings", included: true },
-      { text: "Advanced analytics", included: true },
-      { text: "Team collaboration", included: true },
-      { text: "Priority support", included: true },
-      { text: "Stripe payments", included: true },
-    ],
-    featured: true,
-    buttonText: "Go Pro",
-  },
-];
-
 export default function Pricing() {
+  const { t } = useTranslation();
+  const starterFeatures = t("pricing.starter.features", {
+    returnObjects: true,
+  }) as string[];
+  const professionalFeatures = t("pricing.professional.features", {
+    returnObjects: true,
+  }) as string[];
+
+  const plans = [
+    {
+      name: t("pricing.starter.name"),
+      price: "15",
+      description: t("pricing.starter.description"),
+      features: starterFeatures.map((text, i) => ({
+        text,
+        included: i < 3,
+      })),
+      featured: false,
+      buttonText: t("pricing.starter.button"),
+    },
+    {
+      name: t("pricing.professional.name"),
+      price: "35",
+      description: t("pricing.professional.description"),
+      features: professionalFeatures.map((text) => ({
+        text,
+        included: true,
+      })),
+      featured: true,
+      buttonText: t("pricing.professional.button"),
+    },
+  ];
+
   return (
     <section id="pricing" className="py-20 w-full bg-stone-50">
       <div className="max-w-7xl mx-auto px-6 md:px-16">
         {/* Naslov */}
         <div className="text-center mb-14">
           <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
-            Simple, transparent pricing
+            {t("pricing.title")}
           </h2>
           <p className="text-stone-500 text-base max-w-md mx-auto leading-relaxed">
-            Choose the plan that fits your current business stage. No hidden
-            fees, cancel anytime.
+            {t("pricing.subtitle")}
           </p>
         </div>
 
@@ -61,7 +64,7 @@ export default function Pricing() {
               {/* Most Popular badge */}
               {plan.featured && (
                 <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-moss-600 text-white text-xs font-semibold px-4 py-1 rounded-full whitespace-nowrap">
-                  Most Popular
+                  {t("pricing.mostPopular")}
                 </div>
               )}
 
@@ -75,7 +78,9 @@ export default function Pricing() {
                 <span className="font-display text-5xl font-bold">
                   {plan.price}€
                 </span>
-                <span className="text-stone-400 text-sm">/mo</span>
+                <span className="text-stone-400 text-sm">
+                  {t("pricing.perMonth")}
+                </span>
               </div>
 
               <p className="text-stone-500 text-sm leading-relaxed mb-6">

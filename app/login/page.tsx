@@ -3,9 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 import { apifetch } from "@/lib/api";
 import { useAuthStore } from "@/store/authStore";
 import { FaGoogle } from "react-icons/fa";
+import LanguageSwitcher from "@/app/components/LanguageSwitcher";
 
 type AuthResponse = {
   token: string;
@@ -17,6 +19,7 @@ type AuthResponse = {
 };
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const [isLogin, setIsLogin] = useState(true);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -44,7 +47,7 @@ export default function LoginPage() {
       setUser(data);
       router.push("/dashboard");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : t("login.genericError"));
     } finally {
       setLoading(false);
     }
@@ -53,7 +56,7 @@ export default function LoginPage() {
   const handleRegister = async () => {
     setError("");
     if (registerForm.password !== registerForm.confirmPassword) {
-      setError("Passwords do not match");
+      setError(t("login.passwordMismatch"));
       return;
     }
     setLoading(true);
@@ -65,7 +68,7 @@ export default function LoginPage() {
       setUser(data);
       router.push("/dashboard");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : t("login.genericError"));
     } finally {
       setLoading(false);
     }
@@ -74,23 +77,22 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-linear-to-br from-stone-50 via-white to-moss-50 flex flex-col">
       {/* Back to home */}
-      <div className="px-6 py-4">
+      <div className="px-6 py-4 flex items-center justify-between">
         <Link
           href="/"
           className="text-sm text-stone-500 hover:text-stone-900 flex items-center gap-1"
         >
-          ← Back to Home
+          {t("login.backToHome")}
         </Link>
+        <LanguageSwitcher />
       </div>
 
       {/* Forma */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
         <h1 className="font-display text-3xl font-bold text-moss-700 mb-2">
-          BookEasy
+          {t("login.title")}
         </h1>
-        <p className="text-stone-500 text-sm mb-8">
-          Manage your schedule with ease.
-        </p>
+        <p className="text-stone-500 text-sm mb-8">{t("login.subtitle")}</p>
 
         <div className="bg-white border border-stone-100 rounded-3xl p-8 w-full max-w-md shadow-sm">
           {/* Toggle */}
@@ -103,7 +105,7 @@ export default function LoginPage() {
                   : "text-stone-500 hover:text-stone-700"
               }`}
             >
-              Login
+              {t("login.loginTab")}
             </button>
             <button
               onClick={() => setIsLogin(false)}
@@ -113,7 +115,7 @@ export default function LoginPage() {
                   : "text-stone-500 hover:text-stone-700"
               }`}
             >
-              Register
+              {t("login.registerTab")}
             </button>
           </div>
 
@@ -129,11 +131,11 @@ export default function LoginPage() {
             <div className="flex flex-col gap-4">
               <div>
                 <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                  Email Address
+                  {t("login.emailLabel")}
                 </label>
                 <input
                   type="email"
-                  placeholder="name@company.com"
+                  placeholder={t("login.emailPlaceholder") ?? ""}
                   value={loginForm.email}
                   onChange={(e) =>
                     setLoginForm({ ...loginForm, email: e.target.value })
@@ -144,13 +146,13 @@ export default function LoginPage() {
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="text-sm font-medium text-stone-700">
-                    Password
+                    {t("login.passwordLabel")}
                   </label>
                   <a
                     href="#"
                     className="text-sm text-moss-600 hover:text-moss-700"
                   >
-                    Forgot password?
+                    {t("login.forgotPassword")}
                   </a>
                 </div>
                 <input
@@ -168,7 +170,7 @@ export default function LoginPage() {
                 disabled={loading}
                 className="w-full bg-moss-600 text-white py-3 rounded-full text-sm font-medium hover:bg-moss-700 mt-2 disabled:opacity-50"
               >
-                {loading ? "Signing in..." : "Sign In"}
+                {loading ? t("login.signingIn") : t("login.signIn")}
               </button>
             </div>
           ) : (
@@ -176,11 +178,11 @@ export default function LoginPage() {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                    First Name
+                    {t("login.firstNameLabel")}
                   </label>
                   <input
                     type="text"
-                    placeholder="John"
+                    placeholder={t("login.firstNamePlaceholder") ?? ""}
                     value={registerForm.firstName}
                     onChange={(e) =>
                       setRegisterForm({
@@ -193,11 +195,11 @@ export default function LoginPage() {
                 </div>
                 <div>
                   <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                    Last Name
+                    {t("login.lastNameLabel")}
                   </label>
                   <input
                     type="text"
-                    placeholder="Doe"
+                    placeholder={t("login.lastNamePlaceholder") ?? ""}
                     value={registerForm.lastName}
                     onChange={(e) =>
                       setRegisterForm({
@@ -211,11 +213,11 @@ export default function LoginPage() {
               </div>
               <div>
                 <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                  Business Name
+                  {t("login.businessNameLabel")}
                 </label>
                 <input
                   type="text"
-                  placeholder="Sarah's Studio"
+                  placeholder={t("login.businessNamePlaceholder") ?? ""}
                   value={registerForm.businessName}
                   onChange={(e) =>
                     setRegisterForm({
@@ -228,11 +230,11 @@ export default function LoginPage() {
               </div>
               <div>
                 <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                  Email Address
+                  {t("login.emailLabel")}
                 </label>
                 <input
                   type="email"
-                  placeholder="name@company.com"
+                  placeholder={t("login.emailPlaceholder") ?? ""}
                   value={registerForm.email}
                   onChange={(e) =>
                     setRegisterForm({ ...registerForm, email: e.target.value })
@@ -242,7 +244,7 @@ export default function LoginPage() {
               </div>
               <div>
                 <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                  Password
+                  {t("login.passwordLabel")}
                 </label>
                 <input
                   type="password"
@@ -259,7 +261,7 @@ export default function LoginPage() {
               </div>
               <div>
                 <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                  Confirm Password
+                  {t("login.confirmPasswordLabel")}
                 </label>
                 <input
                   type="password"
@@ -279,7 +281,7 @@ export default function LoginPage() {
                 disabled={loading}
                 className="w-full bg-moss-600 text-white py-3 rounded-full text-sm font-medium hover:bg-moss-700 mt-2 disabled:opacity-50"
               >
-                {loading ? "Creating account..." : "Create Account"}
+                {loading ? t("login.creatingAccount") : t("login.createAccount")}
               </button>
             </div>
           )}
@@ -287,24 +289,26 @@ export default function LoginPage() {
           {/* Divider */}
           <div className="flex items-center gap-3 my-6">
             <div className="flex-1 h-px bg-stone-100"></div>
-            <span className="text-xs text-stone-400">Or continue with</span>
+            <span className="text-xs text-stone-400">
+              {t("login.orContinueWith")}
+            </span>
             <div className="flex-1 h-px bg-stone-100"></div>
           </div>
 
           {/* Google */}
           <button className="w-full border border-stone-200 rounded-full py-3 text-sm font-medium hover:bg-stone-50 flex items-center justify-center gap-2">
             <FaGoogle className="w-4 h-4 text-red-500" />
-            Google
+            {t("login.google")}
           </button>
 
           <p className="text-center text-xs text-stone-400 mt-6">
-            By continuing, you agree to BookEasy&apos;s{" "}
+            {t("login.termsPrefix")}{" "}
             <a href="#" className="text-moss-600 hover:underline">
-              Terms of Service
+              {t("login.termsOfService")}
             </a>{" "}
-            and{" "}
+            {t("login.and")}{" "}
             <a href="#" className="text-moss-600 hover:underline">
-              Privacy Policy
+              {t("login.privacyPolicy")}
             </a>
             .
           </p>
@@ -313,18 +317,16 @@ export default function LoginPage() {
 
       {/* Footer */}
       <div className="px-6 py-4 flex items-center justify-between max-w-md mx-auto w-full">
-        <p className="text-xs text-stone-400">
-          © 2024 BookEasy SaaS. All rights reserved.
-        </p>
+        <p className="text-xs text-stone-400">{t("login.footerCopyright")}</p>
         <div className="flex gap-4">
           <a href="#" className="text-xs text-stone-400 hover:text-stone-600">
-            Privacy
+            {t("login.privacy")}
           </a>
           <a href="#" className="text-xs text-stone-400 hover:text-stone-600">
-            Terms
+            {t("login.terms")}
           </a>
           <a href="#" className="text-xs text-stone-400 hover:text-stone-600">
-            Contact
+            {t("login.contact")}
           </a>
         </div>
       </div>

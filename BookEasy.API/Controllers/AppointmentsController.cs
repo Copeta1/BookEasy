@@ -25,6 +25,16 @@ namespace BookEasy.API.Controllers
             return int.Parse(User.FindFirstValue("BusinessId")!);
         }
 
+        private async Task<bool> HasOverlapAsync(int businessId, DateTime start, DateTime end, int? excludeId = null)
+        {
+            return await _context.Appointments.AnyAsync(a =>
+                a.BusinessId == businessId &&
+                a.Status != AppointmentStatus.Cancelled &&
+                (excludeId == null || a.Id != excludeId) &&
+                a.StartTime < end &&
+                a.EndTime > start);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAppointments()
         {
@@ -61,6 +71,9 @@ namespace BookEasy.API.Controllers
         public async Task<IActionResult> CreateAppointment([FromBody] Appointment dto)
         {
             var businessId = GetBusinessId();
+
+            if (await HasOverlapAsync(businessId, dto.StartTime, dto.EndTime))
+                return Conflict(new { message = "This time slot overlaps with an existing appointment." });
 
             var appointment = new Appointment
             {
@@ -123,9 +136,12 @@ namespace BookEasy.API.Controllers
             if (business == null)
                 return NotFound();
 
+            var dayStart = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
+            var dayEnd = dayStart.AddDays(1);
+
             var appointments = await _context.Appointments
                 .Where(a => a.BusinessId == business.Id &&
-                            a.StartTime.Date == date.Date &&
+                            a.StartTime >= dayStart && a.StartTime < dayEnd &&
                             a.Status != AppointmentStatus.Cancelled)
                 .Select(a => new { a.StartTime, a.EndTime })
                 .ToListAsync();
@@ -137,6 +153,9 @@ namespace BookEasy.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> CreatePublicAppointment([FromBody] PublicAppointmentDto dto)
         {
+            if (await HasOverlapAsync(dto.BusinessId, dto.StartTime, dto.EndTime))
+                return Conflict(new { message = "This time slot is no longer available." });
+
             // Pronađi ili kreiraj klijenta
             var client = await _context.Clients
                 .FirstOrDefaultAsync(c => c.Email == dto.ClientEmail && c.BusinessId == dto.BusinessId);

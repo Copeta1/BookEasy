@@ -1,33 +1,28 @@
+"use client";
+
+import { useTranslation } from "react-i18next";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { FaXTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa6";
-
-const footerLinks: Record<string, { label: string; href: string }[]> = {
-  Product: [
-    { label: "Features", href: "#features" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "Changelog", href: "#" },
-    { label: "Roadmap", href: "#" },
-  ],
-  Company: [
-    { label: "About", href: "#" },
-    { label: "Blog", href: "#" },
-    { label: "Careers", href: "#" },
-    { label: "Press", href: "#" },
-  ],
-  Support: [
-    { label: "Help Center", href: "#" },
-    { label: "Contact", href: "#" },
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
-  ],
-};
 
 const socialLinks = [
   { label: "Twitter", href: "#", icon: FaXTwitter },
   { label: "Instagram", href: "#", icon: FaInstagram },
   { label: "LinkedIn", href: "#", icon: FaLinkedinIn },
 ];
+
 export default function Footer() {
+  const { t } = useTranslation();
+
+  const productLinks = t("footer.productLinks", { returnObjects: true }) as string[];
+  const companyLinks = t("footer.companyLinks", { returnObjects: true }) as string[];
+  const supportLinks = t("footer.supportLinks", { returnObjects: true }) as string[];
+
+  const footerColumns = [
+    { category: t("footer.product"), links: productLinks },
+    { category: t("footer.company"), links: companyLinks },
+    { category: t("footer.support"), links: supportLinks },
+  ];
+
   return (
     <footer className="bg-stone-900 text-white w-full">
       <div className="max-w-7xl mx-auto px-6 md:px-16 py-16">
@@ -39,43 +34,42 @@ export default function Footer() {
               BookEasy
             </span>
             <p className="text-stone-400 text-sm leading-relaxed mb-6 max-w-xs">
-              The all-in-one booking platform for small businesses. Automate
-              scheduling and grow faster.
+              {t("footer.description")}
             </p>
 
             {/* Newsletter */}
             <p className="text-sm font-medium text-white mb-3">
-              Stay up to date
+              {t("footer.stayUpToDate")}
             </p>
             <div className="flex gap-2">
               <div className="flex items-center gap-2 bg-stone-800 rounded-full px-4 py-2.5 flex-1">
                 <EnvelopeIcon className="w-4 h-4 text-moss-400 shrink-0" />
                 <input
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={t("footer.emailPlaceholder") ?? ""}
                   className="bg-transparent text-sm text-white placeholder-stone-500 outline-none w-full"
                 />
               </div>
               <button className="bg-moss-500 text-white text-sm font-semibold px-4 py-2.5 rounded-full hover:bg-moss-400 shrink-0">
-                Subscribe
+                {t("footer.subscribe")}
               </button>
             </div>
           </div>
 
           {/* Linkovi po kolonama */}
-          {Object.entries(footerLinks).map(([category, links]) => (
-            <div key={category}>
+          {footerColumns.map((column) => (
+            <div key={column.category}>
               <h4 className="text-sm font-semibold text-white mb-4">
-                {category}
+                {column.category}
               </h4>
               <ul className="space-y-3">
-                {links.map((link) => (
-                  <li key={link.label}>
+                {column.links.map((link) => (
+                  <li key={link}>
                     <a
-                      href={link.href}
+                      href="#"
                       className="text-stone-400 text-sm hover:text-white transition-colors"
                     >
-                      {link.label}
+                      {link}
                     </a>
                   </li>
                 ))}
@@ -86,9 +80,7 @@ export default function Footer() {
 
         {/* Donji dio */}
         <div className="border-t border-stone-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-stone-400 text-sm">
-            © 2026 BookEasy. All rights reserved.
-          </p>
+          <p className="text-stone-400 text-sm">{t("footer.copyright")}</p>
 
           {/* Social ikone */}
           <div className="flex gap-3">

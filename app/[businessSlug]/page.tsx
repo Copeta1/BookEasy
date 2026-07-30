@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect, use } from "react";
+import { useTranslation } from "react-i18next";
 import { MapPinIcon, ClockIcon, StarIcon } from "@heroicons/react/24/outline";
+import LanguageSwitcher from "@/app/components/LanguageSwitcher";
 
 type Business = {
   id: number;
@@ -31,6 +33,8 @@ export default function BookingPage({
   params: Promise<{ businessSlug: string }>;
 }) {
   const { businessSlug } = use(params);
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === "hr" ? "hr-HR" : "en-US";
 
   const [business, setBusiness] = useState<Business | null>(null);
   const [services, setServices] = useState<Service[]>([]);
@@ -38,6 +42,9 @@ export default function BookingPage({
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [bookedRanges, setBookedRanges] = useState<
+    { startTime: string; endTime: string }[]
+  >([]);
   const [clientForm, setClientForm] = useState({
     firstName: "",
     lastName: "",
@@ -46,6 +53,7 @@ export default function BookingPage({
   });
   const [loading, setLoading] = useState(true);
   const [booked, setBooked] = useState(false);
+  const [bookingError, setBookingError] = useState("");
 
   const timeSlots = [
     "09:00",
@@ -88,6 +96,43 @@ export default function BookingPage({
     fetchData();
   }, [businessSlug]);
 
+  useEffect(() => {
+    const fetchBooked = async () => {
+      if (!selectedDate) {
+        setBookedRanges([]);
+        return;
+      }
+      try {
+        const res = await fetch(
+          `${API_URL}/api/Appointments/public/${businessSlug}?date=${selectedDate}`,
+        );
+        const data = await res.json();
+        setBookedRanges(data ?? []);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchBooked();
+  }, [selectedDate, businessSlug]);
+
+  const isSlotTaken = (slot: string) => {
+    if (!selectedService) return false;
+    const slotStart = new Date(`${selectedDate}T${slot}`);
+    const slotEnd = new Date(
+      slotStart.getTime() + selectedService.duration * 60000,
+    );
+    return bookedRanges.some((range) => {
+      const rangeStart = new Date(range.startTime);
+      const rangeEnd = new Date(range.endTime);
+      return slotStart < rangeEnd && slotEnd > rangeStart;
+    });
+  };
+
+  const formatDate = (dateStr: string) => {
+    const [year, month, day] = dateStr.split("-").map(Number);
+    return new Date(year, month - 1, day).toLocaleDateString(locale);
+  };
+
   const handleBook = async () => {
     if (
       !selectedService ||
@@ -98,13 +143,15 @@ export default function BookingPage({
     )
       return;
 
+    setBookingError("");
+
     try {
       const startTime = new Date(`${selectedDate}T${selectedTime}`);
       const endTime = new Date(
         startTime.getTime() + selectedService.duration * 60000,
       );
 
-      await fetch(`${API_URL}/api/Appointments/public`, {
+      const res = await fetch(`${API_URL}/api/Appointments/public`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -119,6 +166,16 @@ export default function BookingPage({
         }),
       });
 
+      if (!res.ok) {
+        setBookingError(t("booking.bookingError"));
+        setSelectedTime("");
+        const refreshed = await fetch(
+          `${API_URL}/api/Appointments/public/${businessSlug}?date=${selectedDate}`,
+        );
+        setBookedRanges((await refreshed.json()) ?? []);
+        return;
+      }
+
       setBooked(true);
     } catch (err) {
       console.error(err);
@@ -128,13 +185,13 @@ export default function BookingPage({
   if (loading)
     return (
       <div className="min-h-screen flex items-center justify-center text-stone-400">
-        Loading...
+        {t("booking.loading")}
       </div>
     );
   if (!business)
     return (
       <div className="min-h-screen flex items-center justify-center text-stone-400">
-        Business not found.
+        {t("booking.notFound")}
       </div>
     );
 
@@ -146,11 +203,13 @@ export default function BookingPage({
             <span className="text-green-600 text-2xl">✓</span>
           </div>
           <h2 className="font-display text-2xl font-bold mb-2">
-            Booking Confirmed!
+            {t("booking.confirmedTitle")}
           </h2>
           <p className="text-stone-500 text-sm">
-            Your appointment at <strong>{business.name}</strong> has been
-            confirmed. We&apos;ll send a confirmation to {clientForm.email}.
+            {t("booking.confirmedMessage", {
+              business: business.name,
+              email: clientForm.email,
+            })}
           </p>
         </div>
       </div>
@@ -159,10 +218,11 @@ export default function BookingPage({
   return (
     <div className="min-h-screen bg-stone-50">
       {/* Navbar */}
-      <nav className="bg-white border-b border-stone-100 px-6 py-4">
+      <nav className="bg-white border-b border-stone-100 px-6 py-4 flex items-center justify-between">
         <span className="font-display text-xl font-bold text-moss-700">
           BookEasy
         </span>
+        <LanguageSwitcher />
       </nav>
 
       <div className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -188,11 +248,11 @@ export default function BookingPage({
               )}
               <div className="flex items-center gap-2 text-sm text-stone-500">
                 <StarIcon className="w-4 h-4 shrink-0" />
-                4.9 (128 reviews)
+                {t("booking.reviews")}
               </div>
               <div className="flex items-center gap-2 text-sm text-stone-500">
                 <ClockIcon className="w-4 h-4 shrink-0" />
-                Mon - Fri: 09:00 - 19:00
+                {t("booking.hours")}
               </div>
             </div>
           </div>
@@ -204,10 +264,10 @@ export default function BookingPage({
           <div className="bg-white border border-stone-100 rounded-3xl p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-display text-lg font-semibold">
-                1. Select Service
+                {t("booking.step1Title")}
               </h2>
               <span className="text-xs text-stone-400 bg-stone-100 px-3 py-1 rounded-full">
-                Step 1 of 3
+                {t("booking.stepOf", { n: 1 })}
               </span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -226,10 +286,10 @@ export default function BookingPage({
                 >
                   <div className="flex items-start justify-between mb-2">
                     <span className="text-moss-600 font-semibold text-sm">
-                      {service.price === 0 ? "Free" : `${service.price}€`}
+                      {service.price === 0 ? t("booking.free") : `${service.price}€`}
                     </span>
                     <span className="text-xs text-stone-400">
-                      {service.duration} min
+                      {service.duration} {t("booking.minutesShort")}
                     </span>
                   </div>
                   <h3 className="font-semibold text-sm mb-1">{service.name}</h3>
@@ -237,7 +297,7 @@ export default function BookingPage({
                     {service.description}
                   </p>
                   <button className="mt-3 w-full border border-moss-200 text-moss-600 text-xs font-semibold py-1.5 rounded-full hover:bg-moss-50">
-                    Select
+                    {t("booking.select")}
                   </button>
                 </div>
               ))}
@@ -250,15 +310,15 @@ export default function BookingPage({
           >
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-display text-lg font-semibold">
-                2. Choose Date & Time
+                {t("booking.step2Title")}
               </h2>
               <span className="text-xs text-stone-400 bg-stone-100 px-3 py-1 rounded-full">
-                Step 2 of 3
+                {t("booking.stepOf", { n: 2 })}
               </span>
             </div>
             <div className="mb-4">
               <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                Select Date
+                {t("booking.selectDate")}
               </label>
               <input
                 type="date"
@@ -266,6 +326,7 @@ export default function BookingPage({
                 min={new Date().toISOString().split("T")[0]}
                 onChange={(e) => {
                   setSelectedDate(e.target.value);
+                  setSelectedTime("");
                   setStep("confirm");
                 }}
                 className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
@@ -274,22 +335,28 @@ export default function BookingPage({
             {selectedDate && (
               <div>
                 <label className="text-sm font-medium text-stone-700 mb-3 block">
-                  Select Time
+                  {t("booking.selectTime")}
                 </label>
                 <div className="grid grid-cols-4 gap-2">
-                  {timeSlots.map((slot) => (
-                    <button
-                      key={slot}
-                      onClick={() => setSelectedTime(slot)}
-                      className={`py-2 text-sm rounded-full border transition-colors ${
-                        selectedTime === slot
-                          ? "bg-moss-600 text-white border-moss-600"
-                          : "border-stone-200 text-stone-700 hover:border-moss-300"
-                      }`}
-                    >
-                      {slot}
-                    </button>
-                  ))}
+                  {timeSlots.map((slot) => {
+                    const taken = isSlotTaken(slot);
+                    return (
+                      <button
+                        key={slot}
+                        disabled={taken}
+                        onClick={() => setSelectedTime(slot)}
+                        className={`py-2 text-sm rounded-full border transition-colors ${
+                          taken
+                            ? "border-stone-100 text-stone-300 line-through cursor-not-allowed"
+                            : selectedTime === slot
+                              ? "bg-moss-600 text-white border-moss-600"
+                              : "border-stone-200 text-stone-700 hover:border-moss-300"
+                        }`}
+                      >
+                        {slot}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -301,10 +368,10 @@ export default function BookingPage({
           >
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-display text-lg font-semibold">
-                3. Your Details
+                {t("booking.step3Title")}
               </h2>
               <span className="text-xs text-stone-400 bg-white px-3 py-1 rounded-full">
-                Step 3 of 3
+                {t("booking.stepOf", { n: 3 })}
               </span>
             </div>
 
@@ -312,7 +379,7 @@ export default function BookingPage({
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                    First Name
+                    {t("booking.firstName")}
                   </label>
                   <input
                     type="text"
@@ -323,13 +390,13 @@ export default function BookingPage({
                         firstName: e.target.value,
                       })
                     }
-                    placeholder="John"
+                    placeholder={t("booking.firstNamePlaceholder") ?? ""}
                     className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 bg-white"
                   />
                 </div>
                 <div>
                   <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                    Last Name
+                    {t("booking.lastName")}
                   </label>
                   <input
                     type="text"
@@ -337,14 +404,14 @@ export default function BookingPage({
                     onChange={(e) =>
                       setClientForm({ ...clientForm, lastName: e.target.value })
                     }
-                    placeholder="Doe"
+                    placeholder={t("booking.lastNamePlaceholder") ?? ""}
                     className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 bg-white"
                   />
                 </div>
               </div>
               <div>
                 <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                  Email
+                  {t("booking.email")}
                 </label>
                 <input
                   type="email"
@@ -358,7 +425,7 @@ export default function BookingPage({
               </div>
               <div>
                 <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                  Phone
+                  {t("booking.phone")}
                 </label>
                 <input
                   type="tel"
@@ -375,38 +442,42 @@ export default function BookingPage({
             {/* Summary */}
             <div className="bg-white rounded-xl p-4 mb-4 border border-moss-100">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-stone-500">Service</span>
+                <span className="text-sm text-stone-500">{t("booking.summaryService")}</span>
                 <span className="text-sm font-medium">
                   {selectedService?.name ?? "—"}
                 </span>
               </div>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-stone-500">Date</span>
+                <span className="text-sm text-stone-500">{t("booking.summaryDate")}</span>
                 <span className="text-sm font-medium">
-                  {selectedDate || "—"}
+                  {selectedDate ? formatDate(selectedDate) : "—"}
                 </span>
               </div>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-stone-500">Time</span>
+                <span className="text-sm text-stone-500">{t("booking.summaryTime")}</span>
                 <span className="text-sm font-medium">
                   {selectedTime || "—"}
                 </span>
               </div>
               <div className="flex justify-between items-center pt-2 border-t border-stone-100">
-                <span className="text-sm font-semibold">Total</span>
+                <span className="text-sm font-semibold">{t("booking.summaryTotal")}</span>
                 <span className="text-sm font-bold text-moss-600">
                   {selectedService?.price === 0
-                    ? "Free"
+                    ? t("booking.free")
                     : `${selectedService?.price ?? 0}€`}
                 </span>
               </div>
             </div>
 
+            {bookingError && (
+              <p className="text-red-600 text-sm mb-3 text-center">{bookingError}</p>
+            )}
+
             <button
               onClick={handleBook}
               className="w-full bg-moss-600 text-white py-3 rounded-full text-sm font-medium hover:bg-moss-700"
             >
-              Confirm Booking
+              {t("booking.confirmBooking")}
             </button>
           </div>
         </div>

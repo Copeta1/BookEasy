@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   AreaChart,
   Area,
@@ -30,6 +31,7 @@ type AnalyticsData = {
 };
 
 export default function AnalyticsPage() {
+  const { t } = useTranslation();
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -48,23 +50,26 @@ export default function AnalyticsPage() {
   }, []);
 
   if (loading)
-    return <div className="text-stone-400 text-sm p-6">Loading...</div>;
+    return <div className="text-stone-400 text-sm p-6">{t("analytics.loading")}</div>;
   if (!data)
-    return <div className="text-stone-400 text-sm p-6">No data available.</div>;
+    return <div className="text-stone-400 text-sm p-6">{t("analytics.noData")}</div>;
+
+  const revenueLabel = t("analytics.revenueTooltip");
+  const bookingsLabel = t("analytics.bookingsTooltip");
 
   return (
     <div className="max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="font-display text-2xl font-bold">Analytics</h1>
-        <p className="text-stone-500 text-sm mt-1">Last 6 months overview</p>
+        <h1 className="font-display text-2xl font-bold">{t("analytics.title")}</h1>
+        <p className="text-stone-500 text-sm mt-1">{t("analytics.subtitle")}</p>
       </div>
 
       {/* Revenue hero + supporting stats */}
       <div className="grid grid-cols-4 gap-4 mb-4">
         <div className="col-span-4 md:col-span-3 bg-white border border-stone-100 rounded-3xl p-6">
           <p className="text-xs font-semibold uppercase tracking-wide text-stone-400 mb-1">
-            Total Revenue
+            {t("analytics.totalRevenue")}
           </p>
           <p className="text-3xl font-extrabold tabular-nums mb-4">
             {data.totalRevenue}€
@@ -95,7 +100,7 @@ export default function AnalyticsPage() {
                   border: "1px solid #e7e5e4",
                   fontSize: "13px",
                 }}
-                formatter={(value) => [`${value}€`, "Revenue"]}
+                formatter={(value) => [`${value}€`, revenueLabel]}
               />
               <Area
                 type="monotone"
@@ -111,13 +116,13 @@ export default function AnalyticsPage() {
         <div className="col-span-2 md:col-span-1 flex flex-col gap-4">
           <div className="flex-1 bg-white border border-stone-100 rounded-3xl p-5 flex flex-col justify-center">
             <p className="text-xs font-semibold uppercase tracking-wide text-stone-400 mb-2">
-              Total Clients
+              {t("analytics.totalClients")}
             </p>
             <p className="text-2xl font-extrabold tabular-nums">{data.totalClients}</p>
           </div>
           <div className="flex-1 bg-white border border-stone-100 rounded-3xl p-5 flex flex-col justify-center">
             <p className="text-xs font-semibold uppercase tracking-wide text-stone-400 mb-2">
-              Avg. Revenue/mo
+              {t("analytics.avgRevenue")}
             </p>
             <p className="text-2xl font-extrabold tabular-nums">
               {data.avgRevenuePerMonth}€
@@ -130,7 +135,7 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-4 gap-4">
         <div className="col-span-4 md:col-span-3 bg-white border border-stone-100 rounded-3xl p-6">
           <p className="text-xs font-semibold uppercase tracking-wide text-stone-400 mb-1">
-            Total Bookings
+            {t("analytics.totalBookings")}
           </p>
           <p className="text-3xl font-extrabold tabular-nums mb-4">
             {data.totalBookings}
@@ -155,7 +160,7 @@ export default function AnalyticsPage() {
                   border: "1px solid #e7e5e4",
                   fontSize: "13px",
                 }}
-                formatter={(value) => [value, "Bookings"]}
+                formatter={(value) => [value, bookingsLabel]}
               />
               <Bar dataKey="bookings" fill="#b3862f" radius={[6, 6, 0, 0]} />
             </BarChart>
@@ -164,7 +169,7 @@ export default function AnalyticsPage() {
 
         <div className="col-span-2 md:col-span-1 bg-white border border-stone-100 rounded-3xl p-5 flex flex-col justify-center">
           <p className="text-xs font-semibold uppercase tracking-wide text-stone-400 mb-2">
-            Avg. Bookings/mo
+            {t("analytics.avgBookings")}
           </p>
           <p className="text-2xl font-extrabold tabular-nums">
             {data.avgBookingsPerMonth}

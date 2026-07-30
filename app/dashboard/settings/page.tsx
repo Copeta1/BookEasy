@@ -1,9 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import { LinkIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { apifetch } from "@/lib/api";
 
 export default function SettingsPage() {
+  const { t } = useTranslation();
+
   const [profile, setProfile] = useState({
     businessName: "Sarah's Studio",
     ownerName: "Sarah Johnson",
@@ -13,6 +17,21 @@ export default function SettingsPage() {
     description:
       "Expert colorists and stylists dedicated to bringing out your natural radiance.",
   });
+
+  const [slug, setSlug] = useState("");
+  const [origin] = useState(
+    () => (typeof window !== "undefined" ? window.location.origin : ""),
+  );
+  const [copied, setCopied] = useState(false);
+
+  const bookingLink = slug ? `${origin}/${slug}` : "";
+
+  const handleCopyLink = async () => {
+    if (!bookingLink) return;
+    await navigator.clipboard.writeText(bookingLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const [hours, setHours] = useState({
     monday: { open: "09:00", close: "19:00", active: true },
@@ -33,6 +52,29 @@ export default function SettingsPage() {
 
   const days = Object.keys(hours) as (keyof typeof hours)[];
 
+  const notificationItems = [
+    {
+      key: "emailBooking" as const,
+      label: t("settings.notifBookingLabel"),
+      desc: t("settings.notifBookingDesc"),
+    },
+    {
+      key: "emailReminder" as const,
+      label: t("settings.notifReminderLabel"),
+      desc: t("settings.notifReminderDesc"),
+    },
+    {
+      key: "emailCancellation" as const,
+      label: t("settings.notifCancelLabel"),
+      desc: t("settings.notifCancelDesc"),
+    },
+    {
+      key: "smsReminder" as const,
+      label: t("settings.notifSmsLabel"),
+      desc: t("settings.notifSmsDesc"),
+    },
+  ];
+
   const timeSlots = Array.from({ length: 48 }, (_, i) => {
     const hour = Math.floor(i / 2);
     const minute = i % 2 === 0 ? "00" : "30";
@@ -48,6 +90,7 @@ export default function SettingsPage() {
           phone: string;
           address: string;
           description: string;
+          slug: string;
         }>("/api/Business");
 
         setProfile({
@@ -58,6 +101,7 @@ export default function SettingsPage() {
           address: data.address,
           description: data.description,
         });
+        setSlug(data.slug);
       } catch (err) {
         console.error(err);
       }
@@ -78,7 +122,7 @@ export default function SettingsPage() {
           description: profile.description,
         }),
       });
-      alert("Saved successfully!");
+      alert(t("settings.savedSuccess"));
     } catch (err) {
       console.error(err);
     }
@@ -86,17 +130,43 @@ export default function SettingsPage() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <h1 className="font-display text-2xl font-bold mb-8">Settings</h1>
+      <h1 className="font-display text-2xl font-bold mb-8">{t("settings.title")}</h1>
+
+      {bookingLink && (
+        <div className="bg-white border border-stone-100 rounded-3xl p-6 mb-6">
+          <h2 className="font-display text-lg font-semibold mb-1">
+            {t("settings.bookingLinkSection")}
+          </h2>
+          <p className="text-xs text-stone-400 mb-4">{t("settings.bookingLinkDesc")}</p>
+
+          <div className="flex items-center gap-2.5 bg-stone-50 border border-stone-200 rounded-xl px-4 py-3 mb-3">
+            <LinkIcon className="w-4 h-4 text-stone-400 shrink-0" />
+            <span className="text-sm text-stone-700 truncate">{bookingLink}</span>
+          </div>
+
+          <button
+            onClick={handleCopyLink}
+            className={`flex items-center gap-2 text-sm font-medium px-4 py-2.5 rounded-full transition-colors ${
+              copied
+                ? "bg-moss-100 text-moss-700"
+                : "bg-moss-600 text-white hover:bg-moss-700"
+            }`}
+          >
+            {copied && <CheckIcon className="w-4 h-4" />}
+            {copied ? t("settings.copied") : t("settings.copyLink")}
+          </button>
+        </div>
+      )}
 
       <div className="bg-white border border-stone-100 rounded-3xl p-6 mb-6">
         <h2 className="font-display text-lg font-semibold mb-5">
-          Business Profile
+          {t("settings.profileSection")}
         </h2>
         <div className="flex flex-col gap-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                Business Name
+                {t("settings.businessName")}
               </label>
               <input
                 type="text"
@@ -109,7 +179,7 @@ export default function SettingsPage() {
             </div>
             <div>
               <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                Owner Name
+                {t("settings.ownerName")}
               </label>
               <input
                 type="text"
@@ -124,7 +194,7 @@ export default function SettingsPage() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                Email
+                {t("settings.email")}
               </label>
               <input
                 type="email"
@@ -137,7 +207,7 @@ export default function SettingsPage() {
             </div>
             <div>
               <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-                Phone
+                {t("settings.phone")}
               </label>
               <input
                 type="tel"
@@ -151,7 +221,7 @@ export default function SettingsPage() {
           </div>
           <div>
             <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-              Address
+              {t("settings.address")}
             </label>
             <input
               type="text"
@@ -164,7 +234,7 @@ export default function SettingsPage() {
           </div>
           <div>
             <label className="text-sm font-medium text-stone-700 mb-1.5 block">
-              Description
+              {t("settings.description")}
             </label>
             <textarea
               value={profile.description}
@@ -180,7 +250,7 @@ export default function SettingsPage() {
               onClick={handleSave}
               className="bg-moss-600 text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-moss-700"
             >
-              Save Changes
+              {t("settings.saveChanges")}
             </button>
           </div>
         </div>
@@ -188,14 +258,14 @@ export default function SettingsPage() {
 
       <div className="bg-white border border-stone-100 rounded-3xl p-6 mb-6">
         <h2 className="font-display text-lg font-semibold mb-5">
-          Working Hours
+          {t("settings.hoursSection")}
         </h2>
         <div className="flex flex-col gap-3">
           {days.map((day) => (
             <div key={day} className="flex items-center gap-4">
               <div className="w-28">
-                <span className="text-sm font-medium text-stone-700 capitalize">
-                  {day}
+                <span className="text-sm font-medium text-stone-700">
+                  {t(`settings.days.${day}`)}
                 </span>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -249,45 +319,24 @@ export default function SettingsPage() {
                   </select>
                 </div>
               ) : (
-                <span className="text-sm text-stone-400">Closed</span>
+                <span className="text-sm text-stone-400">{t("settings.closed")}</span>
               )}
             </div>
           ))}
         </div>
         <div className="flex justify-end mt-5">
           <button className="bg-moss-600 text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-moss-700">
-            Save Hours
+            {t("settings.saveHours")}
           </button>
         </div>
       </div>
 
       <div className="bg-white border border-stone-100 rounded-3xl p-6">
         <h2 className="font-display text-lg font-semibold mb-5">
-          Notifications
+          {t("settings.notificationsSection")}
         </h2>
         <div className="flex flex-col gap-4">
-          {[
-            {
-              key: "emailBooking",
-              label: "Email on new booking",
-              desc: "Receive an email when a client makes a booking",
-            },
-            {
-              key: "emailReminder",
-              label: "Email reminders",
-              desc: "Send reminder emails to clients 24h before appointment",
-            },
-            {
-              key: "emailCancellation",
-              label: "Email on cancellation",
-              desc: "Receive an email when a client cancels",
-            },
-            {
-              key: "smsReminder",
-              label: "SMS reminders",
-              desc: "Send SMS reminders to clients before appointment",
-            },
-          ].map((item) => (
+          {notificationItems.map((item) => (
             <div
               key={item.key}
               className="flex items-center justify-between py-3 border-b border-stone-50 last:border-0"
@@ -301,9 +350,7 @@ export default function SettingsPage() {
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={
-                    notifications[item.key as keyof typeof notifications]
-                  }
+                  checked={notifications[item.key]}
                   onChange={(e) =>
                     setNotifications({
                       ...notifications,
@@ -319,7 +366,7 @@ export default function SettingsPage() {
         </div>
         <div className="flex justify-end mt-5">
           <button className="bg-moss-600 text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-moss-700">
-            Save Notifications
+            {t("settings.saveNotifications")}
           </button>
         </div>
       </div>
