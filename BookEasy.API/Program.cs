@@ -50,7 +50,10 @@ builder.Services.AddScoped<JwtHelper>();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy => {
-        policy.WithOrigins("http://localhost:3000") //frontend URL
+        policy.WithOrigins(
+            "http://localhost:3000",
+            "https://book-easy-six.vercel.app"
+        )
         .AllowAnyHeader()
         .AllowAnyMethod();
     });
