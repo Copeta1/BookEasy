@@ -16,9 +16,9 @@ export default function Navbar() {
   const user = useAuthStore((state) => state.user);
 
   return (
-    <nav className="sticky top-0 bg-white z-10 border-b border-gray-100">
+    <nav className="sticky top-0 bg-white z-10 border-b border-stone-100">
       <div className="flex items-center justify-between px-6 md:px-16 py-4">
-        <span className="font-display text-xl font-bold text-indigo-600">
+        <span className="font-display text-xl font-bold text-moss-700">
           BookEasy
         </span>
 
@@ -28,7 +28,7 @@ export default function Navbar() {
             <li key={link.label}>
               <a
                 href={link.href}
-                className="text-gray-500 text-sm font-medium hover:text-gray-900"
+                className="text-stone-500 text-sm font-medium hover:text-stone-900"
               >
                 {link.label}
               </a>
@@ -41,7 +41,7 @@ export default function Navbar() {
           {user ? (
             <Link
               href="/dashboard"
-              className="text-sm font-medium px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+              className="text-sm font-medium px-5 py-2 rounded-full bg-moss-600 text-white hover:bg-moss-700"
             >
               Go to Dashboard
             </Link>
@@ -49,13 +49,13 @@ export default function Navbar() {
             <>
               <Link
                 href="/login"
-                className="text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-100"
+                className="text-sm font-medium px-4 py-2 rounded-full hover:bg-stone-100"
               >
                 Login
               </Link>
               <Link
                 href="/login"
-                className="text-sm font-medium px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+                className="text-sm font-medium px-5 py-2 rounded-full bg-moss-600 text-white hover:bg-moss-700"
               >
                 Get Started
               </Link>
@@ -64,35 +64,35 @@ export default function Navbar() {
         </div>
         {/* Hamburger gumb */}
         <button
-          className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+          className="md:hidden p-2 rounded-full hover:bg-stone-100"
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? (
-            <XMarkIcon className="w-6 h-6 text-gray-700" />
+            <XMarkIcon className="w-6 h-6 text-stone-700" />
           ) : (
-            <Bars3Icon className="w-6 h-6 text-gray-700" />
+            <Bars3Icon className="w-6 h-6 text-stone-700" />
           )}
         </button>
       </div>
 
       {/* Mobilni meni */}
       {isOpen && (
-        <div className="md:hidden border-t border-gray-100 px-6 py-4 flex flex-col gap-4">
+        <div className="md:hidden border-t border-stone-100 px-6 py-4 flex flex-col gap-4">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="text-gray-600 text-sm font-medium hover:text-gray-900"
+              className="text-stone-600 text-sm font-medium hover:text-stone-900"
               onClick={() => setIsOpen(false)}
             >
               {link.label}
             </a>
           ))}
-          <div className="flex flex-col gap-2 pt-2 border-t border-gray-100">
+          <div className="flex flex-col gap-2 pt-2 border-t border-stone-100">
             {user ? (
               <Link
                 href="/dashboard"
-                className="text-sm font-medium px-4 py-2.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 text-center"
+                className="text-sm font-medium px-4 py-2.5 rounded-full bg-moss-600 text-white hover:bg-moss-700 text-center"
               >
                 Go to Dashboard
               </Link>
@@ -100,13 +100,13 @@ export default function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="text-sm font-medium px-4 py-2 rounded-lg hover:bg-gray-100"
+                  className="text-sm font-medium px-4 py-2 rounded-full hover:bg-stone-100"
                 >
                   Login
                 </Link>
                 <Link
                   href="/login"
-                  className="text-sm font-medium px-5 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+                  className="text-sm font-medium px-5 py-2 rounded-full bg-moss-600 text-white hover:bg-moss-700"
                 >
                   Get Started
                 </Link>

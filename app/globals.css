@@ -3,4 +3,23 @@
 @theme {
   --font-sans: var(--font-geist), sans-serif;
   --font-display: var(--font-geist), sans-serif;
+
+  /* Daylight palette — moss (primary accent) */
+  --color-moss-50: #f0f4eb;
+  --color-moss-100: #dee8d5;
+  --color-moss-200: #c2d4b4;
+  --color-moss-300: #a3bc94;
+  --color-moss-400: #85a476;
+  --color-moss-500: #6e8f5d;
+  --color-moss-600: #5b7a52;
+  --color-moss-700: #4d6846;
+  --color-moss-800: #41583b;
+  --color-moss-900: #374b32;
+
+  /* Daylight palette — gold (secondary accent, used sparingly) */
+  --color-gold-50: #fbf6e8;
+  --color-gold-100: #f5eacb;
+  --color-gold-500: #c9a227;
+  --color-gold-600: #b3862f;
+  --color-gold-700: #8f6a22;
 }

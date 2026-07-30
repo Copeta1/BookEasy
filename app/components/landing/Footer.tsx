@@ -29,7 +29,7 @@ const socialLinks = [
 ];
 export default function Footer() {
   return (
-    <footer className="bg-indigo-600 text-white w-full">
+    <footer className="bg-stone-900 text-white w-full">
       <div className="max-w-7xl mx-auto px-6 md:px-16 py-16">
         {/* Gornji dio */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-16">
@@ -38,7 +38,7 @@ export default function Footer() {
             <span className="font-display text-2xl font-bold text-white mb-4 block">
               BookEasy
             </span>
-            <p className="text-indigo-200 text-sm leading-relaxed mb-6 max-w-xs">
+            <p className="text-stone-400 text-sm leading-relaxed mb-6 max-w-xs">
               The all-in-one booking platform for small businesses. Automate
               scheduling and grow faster.
             </p>
@@ -48,15 +48,15 @@ export default function Footer() {
               Stay up to date
             </p>
             <div className="flex gap-2">
-              <div className="flex items-center gap-2 bg-indigo-500 rounded-xl px-4 py-2.5 flex-1">
-                <EnvelopeIcon className="w-4 h-4 text-indigo-300 shrink-0" />
+              <div className="flex items-center gap-2 bg-stone-800 rounded-full px-4 py-2.5 flex-1">
+                <EnvelopeIcon className="w-4 h-4 text-moss-400 shrink-0" />
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="bg-transparent text-sm text-white placeholder-indigo-300 outline-none w-full"
+                  className="bg-transparent text-sm text-white placeholder-stone-500 outline-none w-full"
                 />
               </div>
-              <button className="bg-white text-indigo-600 text-sm font-semibold px-4 py-2.5 rounded-xl hover:bg-indigo-50 shrink-0">
+              <button className="bg-moss-500 text-white text-sm font-semibold px-4 py-2.5 rounded-full hover:bg-moss-400 shrink-0">
                 Subscribe
               </button>
             </div>
@@ -73,7 +73,7 @@ export default function Footer() {
                   <li key={link.label}>
                     <a
                       href={link.href}
-                      className="text-indigo-200 text-sm hover:text-white transition-colors"
+                      className="text-stone-400 text-sm hover:text-white transition-colors"
                     >
                       {link.label}
                     </a>
@@ -85,8 +85,8 @@ export default function Footer() {
         </div>
 
         {/* Donji dio */}
-        <div className="border-t border-indigo-500 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-indigo-200 text-sm">
+        <div className="border-t border-stone-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-stone-400 text-sm">
             © 2026 BookEasy. All rights reserved.
           </p>
 
@@ -97,7 +97,7 @@ export default function Footer() {
                 key={social.label}
                 href={social.href}
                 aria-label={social.label}
-                className="w-9 h-9 rounded-xl bg-indigo-500 hover:bg-indigo-400 flex items-center justify-center transition-colors"
+                className="w-9 h-9 rounded-full bg-stone-800 hover:bg-moss-600 flex items-center justify-center transition-colors"
               >
                 <social.icon className="w-4 h-4 text-white" />
               </a>

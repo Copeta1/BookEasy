@@ -88,14 +88,14 @@ export default function SettingsPage() {
     <div className="max-w-3xl mx-auto">
       <h1 className="font-display text-2xl font-bold mb-8">Settings</h1>
 
-      <div className="bg-white border border-gray-100 rounded-2xl p-6 mb-6">
+      <div className="bg-white border border-stone-100 rounded-3xl p-6 mb-6">
         <h2 className="font-display text-lg font-semibold mb-5">
           Business Profile
         </h2>
         <div className="flex flex-col gap-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+              <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                 Business Name
               </label>
               <input
@@ -104,11 +104,11 @@ export default function SettingsPage() {
                 onChange={(e) =>
                   setProfile({ ...profile, businessName: e.target.value })
                 }
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+              <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                 Owner Name
               </label>
               <input
@@ -117,13 +117,13 @@ export default function SettingsPage() {
                 onChange={(e) =>
                   setProfile({ ...profile, ownerName: e.target.value })
                 }
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
               />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+              <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                 Email
               </label>
               <input
@@ -132,11 +132,11 @@ export default function SettingsPage() {
                 onChange={(e) =>
                   setProfile({ ...profile, email: e.target.value })
                 }
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+              <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                 Phone
               </label>
               <input
@@ -145,12 +145,12 @@ export default function SettingsPage() {
                 onChange={(e) =>
                   setProfile({ ...profile, phone: e.target.value })
                 }
-                className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
               />
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+            <label className="text-sm font-medium text-stone-700 mb-1.5 block">
               Address
             </label>
             <input
@@ -159,11 +159,11 @@ export default function SettingsPage() {
               onChange={(e) =>
                 setProfile({ ...profile, address: e.target.value })
               }
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
             />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+            <label className="text-sm font-medium text-stone-700 mb-1.5 block">
               Description
             </label>
             <textarea
@@ -172,13 +172,13 @@ export default function SettingsPage() {
                 setProfile({ ...profile, description: e.target.value })
               }
               rows={3}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 resize-none"
+              className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100 resize-none"
             />
           </div>
           <div className="flex justify-end">
             <button
               onClick={handleSave}
-              className="bg-indigo-600 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-700"
+              className="bg-moss-600 text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-moss-700"
             >
               Save Changes
             </button>
@@ -186,7 +186,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <div className="bg-white border border-gray-100 rounded-2xl p-6 mb-6">
+      <div className="bg-white border border-stone-100 rounded-3xl p-6 mb-6">
         <h2 className="font-display text-lg font-semibold mb-5">
           Working Hours
         </h2>
@@ -194,7 +194,7 @@ export default function SettingsPage() {
           {days.map((day) => (
             <div key={day} className="flex items-center gap-4">
               <div className="w-28">
-                <span className="text-sm font-medium text-gray-700 capitalize">
+                <span className="text-sm font-medium text-stone-700 capitalize">
                   {day}
                 </span>
               </div>
@@ -210,7 +210,7 @@ export default function SettingsPage() {
                   }
                   className="sr-only peer"
                 />
-                <div className="w-9 h-5 bg-gray-200 peer-checked:bg-indigo-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                <div className="w-9 h-5 bg-stone-200 peer-checked:bg-moss-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
               </label>
               {hours[day].active ? (
                 <div className="flex items-center gap-2">
@@ -222,7 +222,7 @@ export default function SettingsPage() {
                         [day]: { ...hours[day], open: e.target.value },
                       })
                     }
-                    className="border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-indigo-500"
+                    className="border border-stone-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-moss-500"
                   >
                     {timeSlots.map((slot) => (
                       <option key={slot} value={slot}>
@@ -230,7 +230,7 @@ export default function SettingsPage() {
                       </option>
                     ))}
                   </select>
-                  <span className="text-gray-400 text-sm">—</span>
+                  <span className="text-stone-400 text-sm">—</span>
                   <select
                     value={hours[day].close}
                     onChange={(e) =>
@@ -239,7 +239,7 @@ export default function SettingsPage() {
                         [day]: { ...hours[day], close: e.target.value },
                       })
                     }
-                    className="border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-indigo-500"
+                    className="border border-stone-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-moss-500"
                   >
                     {timeSlots.map((slot) => (
                       <option key={slot} value={slot}>
@@ -249,19 +249,19 @@ export default function SettingsPage() {
                   </select>
                 </div>
               ) : (
-                <span className="text-sm text-gray-400">Closed</span>
+                <span className="text-sm text-stone-400">Closed</span>
               )}
             </div>
           ))}
         </div>
         <div className="flex justify-end mt-5">
-          <button className="bg-indigo-600 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-700">
+          <button className="bg-moss-600 text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-moss-700">
             Save Hours
           </button>
         </div>
       </div>
 
-      <div className="bg-white border border-gray-100 rounded-2xl p-6">
+      <div className="bg-white border border-stone-100 rounded-3xl p-6">
         <h2 className="font-display text-lg font-semibold mb-5">
           Notifications
         </h2>
@@ -290,13 +290,13 @@ export default function SettingsPage() {
           ].map((item) => (
             <div
               key={item.key}
-              className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0"
+              className="flex items-center justify-between py-3 border-b border-stone-50 last:border-0"
             >
               <div>
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-stone-700">
                   {item.label}
                 </p>
-                <p className="text-xs text-gray-400 mt-0.5">{item.desc}</p>
+                <p className="text-xs text-stone-400 mt-0.5">{item.desc}</p>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
                 <input
@@ -312,13 +312,13 @@ export default function SettingsPage() {
                   }
                   className="sr-only peer"
                 />
-                <div className="w-9 h-5 bg-gray-200 peer-checked:bg-indigo-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+                <div className="w-9 h-5 bg-stone-200 peer-checked:bg-moss-600 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
               </label>
             </div>
           ))}
         </div>
         <div className="flex justify-end mt-5">
-          <button className="bg-indigo-600 text-white px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-700">
+          <button className="bg-moss-600 text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-moss-700">
             Save Notifications
           </button>
         </div>

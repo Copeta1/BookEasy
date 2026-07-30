@@ -231,23 +231,23 @@ export default function CalendarPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-display text-2xl font-bold">Calendar</h1>
         <div className="flex items-center gap-3">
-          <div className="flex bg-gray-100 rounded-xl p-1">
+          <div className="flex bg-stone-100 rounded-full p-1">
             <button
               onClick={() => setView("month")}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${view === "month" ? "bg-indigo-600 text-white" : "text-gray-500 hover:text-gray-700"}`}
+              className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${view === "month" ? "bg-moss-600 text-white" : "text-stone-500 hover:text-stone-700"}`}
             >
               Month
             </button>
             <button
               onClick={() => setView("week")}
-              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${view === "week" ? "bg-indigo-600 text-white" : "text-gray-500 hover:text-gray-700"}`}
+              className={`px-4 py-2 text-sm font-medium rounded-full transition-colors ${view === "week" ? "bg-moss-600 text-white" : "text-stone-500 hover:text-stone-700"}`}
             >
               Week
             </button>
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-700"
+            className="flex items-center gap-2 bg-moss-600 text-white px-4 py-2.5 rounded-full text-sm font-medium hover:bg-moss-700"
           >
             <PlusIcon className="w-4 h-4" />
             New Appointment
@@ -256,32 +256,32 @@ export default function CalendarPage() {
       </div>
 
       {/* Kalendar */}
-      <div className="bg-white border border-gray-100 rounded-2xl p-6">
+      <div className="bg-white border border-stone-100 rounded-3xl p-6">
         {/* Month View */}
         {view === "month" && (
           <>
             <div className="flex items-center justify-between mb-6">
               <button
                 onClick={prevMonth}
-                className="p-2 rounded-xl hover:bg-gray-100"
+                className="p-2 rounded-full hover:bg-stone-100"
               >
-                <ChevronLeftIcon className="w-5 h-5 text-gray-500" />
+                <ChevronLeftIcon className="w-5 h-5 text-stone-500" />
               </button>
               <h2 className="font-display text-lg font-semibold">
                 {MONTHS[currentMonth]} {currentYear}
               </h2>
               <button
                 onClick={nextMonth}
-                className="p-2 rounded-xl hover:bg-gray-100"
+                className="p-2 rounded-full hover:bg-stone-100"
               >
-                <ChevronRightIcon className="w-5 h-5 text-gray-500" />
+                <ChevronRightIcon className="w-5 h-5 text-stone-500" />
               </button>
             </div>
             <div className="grid grid-cols-7 mb-2">
               {DAYS.map((day) => (
                 <div
                   key={day}
-                  className="text-center text-xs font-semibold text-gray-400 py-2"
+                  className="text-center text-xs font-semibold text-stone-400 py-2"
                 >
                   {day}
                 </div>
@@ -297,12 +297,12 @@ export default function CalendarPage() {
                 return (
                   <div
                     key={idx}
-                    className={`min-h-22.5 rounded-xl p-2 ${day ? "hover:bg-gray-50 cursor-pointer" : ""}`}
+                    className={`min-h-22.5 rounded-xl p-2 ${day ? "hover:bg-stone-50 cursor-pointer" : ""}`}
                   >
                     {day && (
                       <>
                         <span
-                          className={`text-sm font-medium w-7 h-7 flex items-center justify-center rounded-full mb-1 ${isToday ? "bg-indigo-600 text-white" : "text-gray-700"}`}
+                          className={`text-sm font-medium w-7 h-7 flex items-center justify-center rounded-full mb-1 ${isToday ? "bg-moss-600 text-white" : "text-stone-700"}`}
                         >
                           {day}
                         </span>
@@ -310,7 +310,7 @@ export default function CalendarPage() {
                           {dayApts.map((apt) => (
                             <span
                               key={apt.id}
-                              className="text-xs px-1.5 py-0.5 rounded-md truncate bg-indigo-100 text-indigo-700"
+                              className="text-xs px-1.5 py-0.5 rounded-md truncate bg-moss-100 text-moss-700"
                             >
                               {apt.client?.firstName ?? "Unknown"} —{" "}
                               {apt.service?.name ?? "Unknown"}
@@ -332,9 +332,9 @@ export default function CalendarPage() {
             <div className="flex items-center justify-between mb-6">
               <button
                 onClick={prevWeek}
-                className="p-2 rounded-xl hover:bg-gray-100"
+                className="p-2 rounded-full hover:bg-stone-100"
               >
-                <ChevronLeftIcon className="w-5 h-5 text-gray-500" />
+                <ChevronLeftIcon className="w-5 h-5 text-stone-500" />
               </button>
               <h2 className="font-display text-lg font-semibold">
                 {weekDates[0].getDate()} — {weekDates[6].getDate()}{" "}
@@ -342,9 +342,9 @@ export default function CalendarPage() {
               </h2>
               <button
                 onClick={nextWeek}
-                className="p-2 rounded-xl hover:bg-gray-100"
+                className="p-2 rounded-full hover:bg-stone-100"
               >
-                <ChevronRightIcon className="w-5 h-5 text-gray-500" />
+                <ChevronRightIcon className="w-5 h-5 text-stone-500" />
               </button>
             </div>
             <div className="grid grid-cols-8 gap-1">
@@ -354,11 +354,11 @@ export default function CalendarPage() {
                 return (
                   <div
                     key={i}
-                    className="text-center pb-3 border-b border-gray-100"
+                    className="text-center pb-3 border-b border-stone-100"
                   >
-                    <p className="text-xs text-gray-400 mb-1">{DAYS[i]}</p>
+                    <p className="text-xs text-stone-400 mb-1">{DAYS[i]}</p>
                     <span
-                      className={`text-sm font-semibold w-8 h-8 flex items-center justify-center rounded-full mx-auto ${isToday ? "bg-indigo-600 text-white" : "text-gray-700"}`}
+                      className={`text-sm font-semibold w-8 h-8 flex items-center justify-center rounded-full mx-auto ${isToday ? "bg-moss-600 text-white" : "text-stone-700"}`}
                     >
                       {date.getDate()}
                     </span>
@@ -367,7 +367,7 @@ export default function CalendarPage() {
               })}
               {HOURS.map((hour, hourIdx) => (
                 <Fragment key={`row-${hourIdx}`}>
-                  <div className="text-xs text-gray-400 pt-2 pr-2 text-right">
+                  <div className="text-xs text-stone-400 pt-2 pr-2 text-right">
                     {hour}
                   </div>
                   {weekDates.map((date, dayIdx) => {
@@ -375,10 +375,10 @@ export default function CalendarPage() {
                     return (
                       <div
                         key={`cell-${hourIdx}-${dayIdx}`}
-                        className="border-t border-gray-50 min-h-13] relative"
+                        className="border-t border-stone-50 min-h-13] relative"
                       >
                         {apt && (
-                          <div className="absolute inset-x-1 top-1 rounded-lg p-1.5 text-xs bg-indigo-100 text-indigo-700 border-l-2 border-indigo-500">
+                          <div className="absolute inset-x-1 top-1 rounded-lg p-1.5 text-xs bg-moss-100 text-moss-700 border-l-2 border-moss-500">
                             <p className="font-medium truncate">
                               {apt.client?.firstName ?? "Unknown"}{" "}
                               {apt.client?.lastName ?? ""}
@@ -401,31 +401,31 @@ export default function CalendarPage() {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-xl font-bold">
                 New Appointment
               </h2>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-2 rounded-lg hover:bg-gray-100"
+                className="p-2 rounded-full hover:bg-stone-100"
               >
-                <XMarkIcon className="w-5 h-5 text-gray-500" />
+                <XMarkIcon className="w-5 h-5 text-stone-500" />
               </button>
             </div>
 
             <div className="flex flex-col gap-4">
               {/* Client toggle */}
-              <div className="flex bg-gray-100 rounded-xl p-1">
+              <div className="flex bg-stone-100 rounded-full p-1">
                 <button
                   onClick={() => setIsNewClient(false)}
-                  className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors ${!isNewClient ? "bg-indigo-600 text-white" : "text-gray-500"}`}
+                  className={`flex-1 py-2 text-sm font-medium rounded-full transition-colors ${!isNewClient ? "bg-moss-600 text-white" : "text-stone-500"}`}
                 >
                   Existing Client
                 </button>
                 <button
                   onClick={() => setIsNewClient(true)}
-                  className={`flex-1 py-2 text-sm font-medium rounded-lg transition-colors ${isNewClient ? "bg-indigo-600 text-white" : "text-gray-500"}`}
+                  className={`flex-1 py-2 text-sm font-medium rounded-full transition-colors ${isNewClient ? "bg-moss-600 text-white" : "text-stone-500"}`}
                 >
                   New Client
                 </button>
@@ -434,7 +434,7 @@ export default function CalendarPage() {
               {/* Existing client search */}
               {!isNewClient && (
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+                  <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                     Search Client
                   </label>
                   <input
@@ -442,11 +442,11 @@ export default function CalendarPage() {
                     placeholder="Type to search..."
                     value={clientSearch}
                     onChange={(e) => setClientSearch(e.target.value)}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 mb-2"
+                    className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100 mb-2"
                   />
-                  <div className="border border-gray-200 rounded-xl overflow-hidden max-h-40 overflow-y-auto">
+                  <div className="border border-stone-200 rounded-xl overflow-hidden max-h-40 overflow-y-auto">
                     {filteredClients.length === 0 ? (
-                      <p className="text-sm text-gray-400 p-3">
+                      <p className="text-sm text-stone-400 p-3">
                         No clients found.
                       </p>
                     ) : (
@@ -456,7 +456,7 @@ export default function CalendarPage() {
                           onClick={() =>
                             setForm({ ...form, clientId: String(c.id) })
                           }
-                          className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-indigo-50 ${form.clientId === String(c.id) ? "bg-indigo-50 text-indigo-600 font-medium" : "text-gray-700"}`}
+                          className={`px-4 py-2.5 text-sm cursor-pointer hover:bg-moss-50 ${form.clientId === String(c.id) ? "bg-moss-50 text-moss-600 font-medium" : "text-stone-700"}`}
                         >
                           {c.firstName} {c.lastName}
                         </div>
@@ -471,7 +471,7 @@ export default function CalendarPage() {
                 <div className="flex flex-col gap-3">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+                      <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                         First Name
                       </label>
                       <input
@@ -484,11 +484,11 @@ export default function CalendarPage() {
                           })
                         }
                         placeholder="John"
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                        className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                       />
                     </div>
                     <div>
-                      <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+                      <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                         Last Name
                       </label>
                       <input
@@ -501,12 +501,12 @@ export default function CalendarPage() {
                           })
                         }
                         placeholder="Doe"
-                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                        className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                       />
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+                    <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                       Email
                     </label>
                     <input
@@ -519,11 +519,11 @@ export default function CalendarPage() {
                         })
                       }
                       placeholder="john@example.com"
-                      className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                      className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+                    <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                       Phone
                     </label>
                     <input
@@ -536,7 +536,7 @@ export default function CalendarPage() {
                         })
                       }
                       placeholder="+385 91 123 4567"
-                      className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                      className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                     />
                   </div>
                 </div>
@@ -544,7 +544,7 @@ export default function CalendarPage() {
 
               {/* Service */}
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+                <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                   Service
                 </label>
                 <select
@@ -552,7 +552,7 @@ export default function CalendarPage() {
                   onChange={(e) =>
                     setForm({ ...form, serviceId: e.target.value })
                   }
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                  className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                 >
                   <option value="">Select service...</option>
                   {services.map((s) => (
@@ -566,25 +566,25 @@ export default function CalendarPage() {
               {/* Date & Time */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+                  <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                     Date
                   </label>
                   <input
                     type="date"
                     value={form.date}
                     onChange={(e) => setForm({ ...form, date: e.target.value })}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                    className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+                  <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                     Time
                   </label>
                   <input
                     type="time"
                     value={form.time}
                     onChange={(e) => setForm({ ...form, time: e.target.value })}
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                    className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                   />
                 </div>
               </div>
@@ -593,13 +593,13 @@ export default function CalendarPage() {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="flex-1 border border-gray-200 text-gray-600 py-3 rounded-xl text-sm font-medium hover:bg-gray-50"
+                className="flex-1 border border-stone-200 text-stone-600 py-3 rounded-full text-sm font-medium hover:bg-stone-50"
               >
                 Cancel
               </button>
               <button
                 onClick={handleAddAppointment}
-                className="flex-1 bg-indigo-600 text-white py-3 rounded-xl text-sm font-medium hover:bg-indigo-700"
+                className="flex-1 bg-moss-600 text-white py-3 rounded-full text-sm font-medium hover:bg-moss-700"
               >
                 Add Appointment
               </button>

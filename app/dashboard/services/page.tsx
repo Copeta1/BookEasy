@@ -111,7 +111,7 @@ export default function ServicesPage() {
         <h1 className="font-display text-2xl font-bold">Services</h1>
         <button
           onClick={openAdd}
-          className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-indigo-700"
+          className="flex items-center gap-2 bg-moss-600 text-white px-4 py-2.5 rounded-full text-sm font-medium hover:bg-moss-700"
         >
           <PlusIcon className="w-4 h-4" />
           Add Service
@@ -119,30 +119,30 @@ export default function ServicesPage() {
       </div>
 
       {/* Tablica */}
-      <div className="bg-white border border-gray-100 rounded-2xl overflow-hidden">
+      <div className="bg-white border border-stone-100 rounded-3xl overflow-hidden">
         {loading ? (
-          <p className="text-gray-400 text-sm p-6">Loading...</p>
+          <p className="text-stone-400 text-sm p-6">Loading...</p>
         ) : services.length === 0 ? (
-          <p className="text-gray-400 text-sm p-6">
+          <p className="text-stone-400 text-sm p-6">
             No services yet. Add your first service!
           </p>
         ) : (
           <table className="w-full">
             <thead>
-              <tr className="border-b border-gray-100">
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+              <tr className="border-b border-stone-100">
+                <th className="text-left px-6 py-4 text-xs font-semibold text-stone-400 uppercase tracking-wide">
                   Service
                 </th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                <th className="text-left px-6 py-4 text-xs font-semibold text-stone-400 uppercase tracking-wide">
                   Category
                 </th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                <th className="text-left px-6 py-4 text-xs font-semibold text-stone-400 uppercase tracking-wide">
                   Duration
                 </th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                <th className="text-left px-6 py-4 text-xs font-semibold text-stone-400 uppercase tracking-wide">
                   Price
                 </th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+                <th className="text-left px-6 py-4 text-xs font-semibold text-stone-400 uppercase tracking-wide">
                   Actions
                 </th>
               </tr>
@@ -151,35 +151,35 @@ export default function ServicesPage() {
               {services.map((service) => (
                 <tr
                   key={service.id}
-                  className="border-b border-gray-50 last:border-0 hover:bg-gray-50"
+                  className="border-b border-stone-50 last:border-0 hover:bg-stone-50"
                 >
                   <td className="px-6 py-4">
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-sm font-medium text-stone-900">
                       {service.name}
                     </p>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="text-xs font-medium bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-full">
+                    <span className="text-xs font-medium bg-moss-50 text-moss-600 px-2.5 py-1 rounded-full">
                       {service.category}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-500">
+                  <td className="px-6 py-4 text-sm text-stone-500">
                     {service.duration} min
                   </td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-900">
+                  <td className="px-6 py-4 text-sm font-semibold text-stone-900">
                     {service.price === 0 ? "Free" : `${service.price}€`}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => openEdit(service)}
-                        className="p-2 rounded-lg hover:bg-indigo-50 text-gray-400 hover:text-indigo-600"
+                        className="p-2 rounded-full hover:bg-moss-50 text-stone-400 hover:text-moss-600"
                       >
                         <PencilIcon className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(service.id)}
-                        className="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500"
+                        className="p-2 rounded-full hover:bg-red-50 text-stone-400 hover:text-red-500"
                       >
                         <TrashIcon className="w-4 h-4" />
                       </button>
@@ -195,13 +195,13 @@ export default function ServicesPage() {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 w-full max-w-md shadow-xl">
+          <div className="bg-white rounded-3xl p-8 w-full max-w-md shadow-xl">
             <h2 className="font-display text-xl font-bold mb-6">
               {editingService ? "Edit Service" : "Add Service"}
             </h2>
             <div className="flex flex-col gap-4">
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+                <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                   Service Name
                 </label>
                 <input
@@ -209,11 +209,11 @@ export default function ServicesPage() {
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   placeholder="e.g. Balayage & Styling"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                  className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                 />
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+                <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                   Category
                 </label>
                 <input
@@ -223,12 +223,12 @@ export default function ServicesPage() {
                     setForm({ ...form, category: e.target.value })
                   }
                   placeholder="e.g. Hair, Nails, Grooming"
-                  className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                  className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                 />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+                  <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                     Duration (min)
                   </label>
                   <input
@@ -238,11 +238,11 @@ export default function ServicesPage() {
                       setForm({ ...form, duration: e.target.value })
                     }
                     placeholder="45"
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                    className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1.5 block">
+                  <label className="text-sm font-medium text-stone-700 mb-1.5 block">
                     Price (€)
                   </label>
                   <input
@@ -252,7 +252,7 @@ export default function ServicesPage() {
                       setForm({ ...form, price: e.target.value })
                     }
                     placeholder="0"
-                    className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                    className="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm outline-none focus:border-moss-500 focus:ring-2 focus:ring-moss-100"
                   />
                 </div>
               </div>
@@ -260,13 +260,13 @@ export default function ServicesPage() {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="flex-1 border border-gray-200 text-gray-600 py-3 rounded-xl text-sm font-medium hover:bg-gray-50"
+                className="flex-1 border border-stone-200 text-stone-600 py-3 rounded-full text-sm font-medium hover:bg-stone-50"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="flex-1 bg-indigo-600 text-white py-3 rounded-xl text-sm font-medium hover:bg-indigo-700"
+                className="flex-1 bg-moss-600 text-white py-3 rounded-full text-sm font-medium hover:bg-moss-700"
               >
                 {editingService ? "Save Changes" : "Add Service"}
               </button>

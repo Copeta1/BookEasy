@@ -34,14 +34,14 @@ const plans = [
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-20 w-full bg-gray-50">
+    <section id="pricing" className="py-20 w-full bg-stone-50">
       <div className="max-w-7xl mx-auto px-6 md:px-16">
         {/* Naslov */}
         <div className="text-center mb-14">
           <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
             Simple, transparent pricing
           </h2>
-          <p className="text-gray-500 text-base max-w-md mx-auto leading-relaxed">
+          <p className="text-stone-500 text-base max-w-md mx-auto leading-relaxed">
             Choose the plan that fits your current business stage. No hidden
             fees, cancel anytime.
           </p>
@@ -52,21 +52,21 @@ export default function Pricing() {
           {plans.map((plan) => (
             <div
               key={plan.name}
-              className={`relative bg-white rounded-2xl p-8 ${
+              className={`relative bg-white rounded-3xl p-8 ${
                 plan.featured
-                  ? "border-2 border-indigo-600"
-                  : "border border-gray-100"
+                  ? "border-2 border-moss-600"
+                  : "border border-stone-100"
               }`}
             >
               {/* Most Popular badge */}
               {plan.featured && (
-                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-xs font-semibold px-4 py-1 rounded-full whitespace-nowrap">
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-moss-600 text-white text-xs font-semibold px-4 py-1 rounded-full whitespace-nowrap">
                   Most Popular
                 </div>
               )}
 
               <p
-                className={`text-sm font-semibold mb-2 ${plan.featured ? "text-indigo-600" : "text-gray-500"}`}
+                className={`text-sm font-semibold mb-2 ${plan.featured ? "text-moss-600" : "text-stone-500"}`}
               >
                 {plan.name}
               </p>
@@ -75,10 +75,10 @@ export default function Pricing() {
                 <span className="font-display text-5xl font-bold">
                   {plan.price}€
                 </span>
-                <span className="text-gray-400 text-sm">/mo</span>
+                <span className="text-stone-400 text-sm">/mo</span>
               </div>
 
-              <p className="text-gray-500 text-sm leading-relaxed mb-6">
+              <p className="text-stone-500 text-sm leading-relaxed mb-6">
                 {plan.description}
               </p>
 
@@ -88,14 +88,14 @@ export default function Pricing() {
                     key={feature.text}
                     className={`flex items-center gap-2 text-sm ${
                       feature.included
-                        ? "text-gray-700"
-                        : "text-gray-300 line-through"
+                        ? "text-stone-700"
+                        : "text-stone-300 line-through"
                     }`}
                   >
                     {feature.included ? (
-                      <CheckCircleIcon className="w-5 h-5 text-indigo-600 shrink-0" />
+                      <CheckCircleIcon className="w-5 h-5 text-moss-600 shrink-0" />
                     ) : (
-                      <XCircleIcon className="w-5 h-5 text-gray-300 shrink-0" />
+                      <XCircleIcon className="w-5 h-5 text-stone-300 shrink-0" />
                     )}
                     {feature.text}
                   </li>
@@ -103,10 +103,10 @@ export default function Pricing() {
               </ul>
 
               <button
-                className={`w-full py-3 rounded-xl text-sm font-medium transition-colors ${
+                className={`w-full py-3 rounded-full text-sm font-medium transition-colors ${
                   plan.featured
-                    ? "bg-indigo-600 text-white hover:bg-indigo-700"
-                    : "border border-indigo-600 text-indigo-600 hover:bg-indigo-50"
+                    ? "bg-moss-600 text-white hover:bg-moss-700"
+                    : "border border-moss-600 text-moss-600 hover:bg-moss-50"
                 }`}
               >
                 {plan.buttonText}
